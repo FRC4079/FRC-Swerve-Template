@@ -44,7 +44,7 @@ object Kommand {
      * @return An [InstantCommand] that resets the Pidgey sensor.
      */
     @JvmStatic
-    fun resetPidgey() = InstantCommand({ Swerve.getInstance().resetPidgey() })
+    fun resetPidgey() = InstantCommand({ Swerve.resetPidgey() })
 
     /**
      * Creates an [InstantCommand] to set the teleoperation PID.
@@ -52,7 +52,7 @@ object Kommand {
      * @return An [InstantCommand] that sets the teleoperation PID.
      */
     @JvmStatic
-    fun setTelePid() = InstantCommand({ Swerve.getInstance().setTelePID() })
+    fun setTelePid() = InstantCommand({ Swerve.setTelePID() })
 
     /**
      * Creates a [PathPlannerAuto] command for autonomous operation.
