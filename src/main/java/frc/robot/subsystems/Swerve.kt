@@ -31,7 +31,7 @@ import java.util.function.BooleanSupplier
 import java.util.function.Consumer
 import java.util.function.Supplier
 
-class Swerve private constructor() : SubsystemBase() {
+object Swerve : SubsystemBase() {
     private val poseEstimator: SwerveDrivePoseEstimator
     private val field = Field2d()
     private val pidgey = Pigeon2(MotorParameters.PIDGEY_ID)
@@ -338,14 +338,14 @@ class Swerve private constructor() : SubsystemBase() {
         this.moduleStates = newStates
     }
 
-    var moduleStates: Array<SwerveModuleState?>
+    var moduleStates: Array<SwerveModuleState>
         /**
          * Gets the states of the swerve modules.
          *
          * @return SwerveModuleState[], The states of the swerve modules.
          */
         get() {
-            val moduleStates = arrayOfNulls<SwerveModuleState>(4)
+            val moduleStates = emptyArray<SwerveModuleState>()
             for (i in modules.indices) {
                 moduleStates[i] = modules[i].getState()
             }
@@ -357,7 +357,6 @@ class Swerve private constructor() : SubsystemBase() {
          * @param states The states of the swerve modules.
          */
         set(states) {
-            setStates = states
             for (i in states.indices) {
                 modules[i].setState(states[i])
             }
@@ -372,7 +371,7 @@ class Swerve private constructor() : SubsystemBase() {
         get() {
             val positions = arrayOfNulls<SwerveModulePosition>(states.size)
             for (i in positions.indices) {
-                positions[i] = modules[i].getPosition()
+                positions[i] = modules[i].position
             }
             return positions
         }
@@ -418,17 +417,5 @@ class Swerve private constructor() : SubsystemBase() {
 
     fun pathFindTest(): Command? {
         return AutoBuilder.pathfindThenFollowPath(pathToScore, constraints)
-    }
-
-    companion object {
-        /**
-         * Returns the Singleton instance of this SwerveSubsystem. This static method should be used,
-         * rather than the constructor, to get the single instance of this class. For example: `SwerveSubsystem.getInstance();`
-         */
-        /**
-         * The Singleton instance of this SwerveSubsystem. Code should use the [.getInstance]
-         * method to get the single instance (rather than trying to construct an instance of this class.)
-         */
-        val instance: Swerve = Swerve()
     }
 }

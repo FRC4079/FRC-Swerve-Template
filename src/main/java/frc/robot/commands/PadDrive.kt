@@ -4,6 +4,9 @@ import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.subsystems.Swerve
 import frc.robot.utils.Dash.log
 import frc.robot.utils.RobotParameters
+import frc.robot.utils.RobotParameters.MotorParameters.MAX_SPEED
+import frc.robot.utils.RobotParameters.SwerveParameters.Thresholds.X_DEADZONE
+import frc.robot.utils.RobotParameters.SwerveParameters.Thresholds.Y_DEADZONE
 import frc.robot.utils.controller.GamingController
 import kotlin.math.abs
 
@@ -16,7 +19,7 @@ class PadDrive(private val pad: GamingController, private val isFieldOriented: B
      * @param isFieldOriented Whether the drive is field-oriented.
      */
     init {
-        addRequirements(Swerve.getInstance())
+        addRequirements(Swerve)
     }
 
     /**
@@ -25,7 +28,7 @@ class PadDrive(private val pad: GamingController, private val isFieldOriented: B
      * sets the drive speeds for the swerve subsystem.
      */
     override fun execute() {
-        val position: Pair<Double?, Double?> = positionSet(pad)
+        val position: Pair<Double, Double> = positionSet(pad)
 
         val rotation =
             if (abs(pad.rightAnalogXAxis) >= 0.1)
@@ -37,8 +40,8 @@ class PadDrive(private val pad: GamingController, private val isFieldOriented: B
         log("Y Joystick", position.second!!)
         log("Rotation", rotation)
 
-        Swerve.getInstance()
-            .setDriveSpeeds(position.second, position.first, rotation * 0.5, isFieldOriented)
+        Swerve
+            .setDriveSpeeds(position.second!!, position.first, rotation * 0.5, isFieldOriented)
     }
 
     /**
@@ -58,14 +61,14 @@ class PadDrive(private val pad: GamingController, private val isFieldOriented: B
          * @return The coordinate representing the position. The first element is the x-coordinate, and
          * the second element is the y-coordinate.
          */
-        fun positionSet(pad: GamingController): Pair<Double?, Double?> {
+        fun positionSet(pad: GamingController): Pair<Double, Double> {
             var x: Double = -pad.leftAnalogXAxis * MAX_SPEED
             if (abs(x) < X_DEADZONE) x = 0.0
 
             var y: Double = -pad.leftAnalogYAxis * MAX_SPEED
             if (abs(y) < Y_DEADZONE) y = 0.0
 
-            return Pair<Double?, Double?>(x, y)
+            return x to y
         }
     }
 }

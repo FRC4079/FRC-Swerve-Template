@@ -25,7 +25,7 @@ import kotlin.math.sqrt
  * targets, and the yaw of detected AprilTags. It also provides methods to check if a tag is visible
  * and get the pivot position based on distance calculations.
  */
-class PhotonVision private constructor() : SubsystemBase() {
+object PhotonVision : SubsystemBase() {
     private val cameras: MutableList<PhotonModule> = ArrayList<PhotonModule>()
     private var bestCamera: PhotonModule? = null
     private var currentResult: PhotonPipelineResult? = null
@@ -221,16 +221,4 @@ class PhotonVision private constructor() : SubsystemBase() {
                     + (b * r)
                     + a)
         }
-
-    companion object {
-        /**
-         * Returns the Singleton instance of this PhotonVision subsystem. This static method should be
-         * used, rather than the constructor, to get the single instance of this class. For example:
-         * `PhotonVision.getInstance();`
-         *
-         * @return The Singleton instance of PhotonVision
-         */
-        // Singleton instance
-        val instance: PhotonVision = PhotonVision()
-    }
 }

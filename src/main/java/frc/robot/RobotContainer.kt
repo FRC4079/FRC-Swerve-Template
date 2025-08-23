@@ -39,7 +39,7 @@ class RobotContainer {
         padLeftBumper = JoystickButton(pad, 5)
         padRightBumper = JoystickButton(pad, 6)
 
-        Swerve.getInstance().setDefaultCommand(drive(pad, Thresholds.IS_FIELD_ORIENTED))
+        Swerve.defaultCommand = drive(pad, Thresholds.IS_FIELD_ORIENTED)
 
         configureBindings()
 

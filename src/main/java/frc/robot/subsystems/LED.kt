@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.RobotState
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import kotlin.math.sin
 
-class LED private constructor() : SubsystemBase() {
+object LED : SubsystemBase() {
     private val alignmentIndication1 = AddressableLED(9)
     private val addressableLEDBuffer = AddressableLEDBuffer(120)
 
@@ -114,17 +114,5 @@ class LED private constructor() : SubsystemBase() {
             addressableLEDBuffer.setRGB(i, r, g, b)
         }
         alignmentIndication1.setData(addressableLEDBuffer)
-    }
-
-    companion object {
-        /**
-         * Returns the Singleton instance of this LEDSubsystem. This static method should be used, rather
-         * than the constructor, to get the single instance of this class. For example: `LEDSubsystem.getInstance();`
-         */
-        /**
-         * The Singleton instance of this LEDSubsystem. Code should use the [.getInstance] method
-         * to get the single instance (rather than trying to construct an instance of this class.)
-         */
-        val instance: LED = LED()
     }
 }

@@ -6,6 +6,9 @@ import frc.robot.subsystems.PhotonVision
 import frc.robot.subsystems.Swerve
 import frc.robot.utils.Direction
 import frc.robot.utils.RobotParameters.SwerveParameters
+import frc.robot.utils.RobotParameters.SwerveParameters.PIDParameters.DIST_PID
+import frc.robot.utils.RobotParameters.SwerveParameters.PIDParameters.ROTATIONAL_PID
+import frc.robot.utils.RobotParameters.SwerveParameters.PIDParameters.Y_PID
 
 class AlignSwerve : Command {
     private var yaw = 0.0
@@ -14,7 +17,7 @@ class AlignSwerve : Command {
     private var rotationalController: PIDController? = null
     private var yController: PIDController? = null
     private var disController: PIDController? = null
-    private val offset = 0.0 // double offset is the left/right offset from the april tag to make it properly align
+    private var offset = 0.0 // double offset is the left/right offset from the april tag to make it properly align
 
     /**
      * Creates a new AlignSwerve using the Direction Enum.
@@ -29,32 +32,14 @@ class AlignSwerve : Command {
             Direction.CENTER -> this.offset = 0.0
         }
 
-        addRequirements(Swerve.getInstance())
-    }
-
-    /**
-     * Creates a new AlignSwerve.
-     *
-     * @param offsetSide The side of the robot to offset the alignment to. Can be "left", "right", or
-     * "center".
-     * @param offsetAmount The amount to offset the alignment by.
-     */
-    constructor(offsetSide: Direction, offsetAmount: Double) {
-        // TODO: Placeholder for the offset amount, figure out the correct value
-        when (offsetSide) {
-            Direction.LEFT -> this.offset = -offsetAmount
-            Direction.RIGHT -> this.offset = offsetAmount
-            Direction.CENTER -> this.offset = 0.0
-        }
-
-        addRequirements(Swerve.getInstance())
+        addRequirements(Swerve)
     }
 
     /** The initial subroutine of a command. Called once when the command is initially scheduled.  */
     override fun initialize() {
-        yaw = PhotonVision.getInstance().getYaw()
-        y = PhotonVision.getInstance().getY()
-        dist = PhotonVision.getInstance().getDist()
+        yaw = PhotonVision.yaw
+        y = PhotonVision.y
+        dist = PhotonVision.dist
 
         rotationalController =
             PIDController(ROTATIONAL_PID.getP(), ROTATIONAL_PID.getI(), ROTATIONAL_PID.getD())
@@ -77,11 +62,11 @@ class AlignSwerve : Command {
      * called repeatedly until [.isFinished]) returns true.)
      */
     override fun execute() {
-        yaw = PhotonVision.getInstance().getYaw()
-        y = PhotonVision.getInstance().getY()
-        dist = PhotonVision.getInstance().getDist()
+        yaw = PhotonVision.yaw
+        y = PhotonVision.y
+        dist = PhotonVision.dist
 
-        Swerve.getInstance()
+        Swerve
             .setDriveSpeeds(
                 disController!!.calculate(dist),
                 yController!!.calculate(y) + offset,
@@ -117,6 +102,6 @@ class AlignSwerve : Command {
      * @param interrupted whether the command was interrupted/canceled
      */
     override fun end(interrupted: Boolean) {
-        Swerve.getInstance().stop()
+        Swerve.stop()
     }
 }
