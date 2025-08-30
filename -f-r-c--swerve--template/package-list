@@ -83,8 +83,8 @@ $dokka.location:frc.robot.subsystems/SwerveModule/SwerveModule/#kotlin.Int#kotli
 $dokka.location:frc.robot.subsystems/SwerveModule/applyTelePIDValues/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/apply-tele-p-i-d-values.html
 $dokka.location:frc.robot.subsystems/SwerveModule/getPosition/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/get-position.html
 $dokka.location:frc.robot.subsystems/SwerveModule/getState/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/get-state.html
+$dokka.location:frc.robot.subsystems/SwerveModule/initializeAlarms/#kotlin.Int#kotlin.Int#kotlin.Int/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/initialize-alarms.html
 $dokka.location:frc.robot.subsystems/SwerveModule/initializeLoggedNetworkPID/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/initialize-logged-network-p-i-d.html
-$dokka.location:frc.robot.subsystems/SwerveModule/intializeAlarms/#kotlin.Int#kotlin.Int#kotlin.Int/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/intialize-alarms.html
 $dokka.location:frc.robot.subsystems/SwerveModule/resetDrivePosition/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/reset-drive-position.html
 $dokka.location:frc.robot.subsystems/SwerveModule/setAutoPID/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/set-auto-p-i-d.html
 $dokka.location:frc.robot.subsystems/SwerveModule/setDrivePID/#edu.wpi.first.math.controller.PIDController#kotlin.Double/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/set-drive-p-i-d.html
