@@ -23,14 +23,18 @@ import frc.robot.utils.RobotParameters.SwerveParameters.PIDParameters
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
 /** Represents a swerve module used in a swerve drive system.  */
-class SwerveModule(driveId: Int, steerId: Int, canCoderID: Int, canCoderDriveStraightSteerSetPoint: Double) {
+class SwerveModule(
+    driveId: Int,
+    steerId: Int,
+    canCoderID: Int,
+    canCoderDriveStraightSteerSetPoint: Double,
+) {
     private val driveMotor: TalonFX
     private val canCoder: CANcoder
     private val steerMotor: TalonFX
     private val positionSetter: PositionTorqueCurrentFOC
     private val velocitySetter: VelocityTorqueCurrentFOC
     private val swerveModulePosition: SwerveModulePosition
-    private var state: SwerveModuleState
     private var driveVelocity: Double
     private var drivePosition: Double
     private var steerPosition: Double
@@ -54,6 +58,81 @@ class SwerveModule(driveId: Int, steerId: Int, canCoderID: Int, canCoderDriveStr
     private var canCoderDisconnectedAlert: Alert? = null
 
     /**
+     * Gets the current position of the swerve module.
+     *
+     * Updates the cached drive and steer velocities and positions,
+     * then sets the swerve module's angle and distance in meters
+     * based on the current sensor readings.
+     *
+     * @return The current `SwerveModulePosition` containing angle and distance.
+     */
+    val position: SwerveModulePosition
+        get() {
+            driveVelocity = driveMotor.velocity.valueAsDouble
+            drivePosition = driveMotor.position.valueAsDouble
+            steerVelocity = steerMotor.velocity.valueAsDouble
+            steerPosition = steerMotor.position.valueAsDouble
+
+            swerveModulePosition.angle =
+                Rotation2d.fromRotations(canCoder.absolutePosition.valueAsDouble)
+            swerveModulePosition.distanceMeters =
+                (drivePosition / MotorParameters.DRIVE_MOTOR_GEAR_RATIO * MotorParameters.METERS_PER_REV)
+
+            return swerveModulePosition
+        }
+
+    var state = SwerveModuleState(0.0, Rotation2d.fromDegrees(0.0))
+        get() {
+            field.angle = Rotation2d.fromRotations(canCoder.absolutePosition.valueAsDouble)
+            field.speedMetersPerSecond =
+                (
+                    driveMotor.rotorVelocity.valueAsDouble /
+                        MotorParameters.DRIVE_MOTOR_GEAR_RATIO
+                        * MotorParameters.METERS_PER_REV
+                )
+            return field
+        }
+        set(value) {
+            // Get the current angle
+            val currentAngle =
+                Rotation2d.fromRotations(canCoder.absolutePosition.valueAsDouble)
+
+            // Optimize the desired state based on current angle
+            value.optimize(currentAngle)
+
+            // Set the angle for the steer motor
+            val angleToSet = value.angle.rotations
+            steerMotor.setControl(positionSetter.withPosition(angleToSet))
+
+            // Set the velocity for the drive motor
+            val velocityToSet =
+                (
+                    value.speedMetersPerSecond
+                        * (MotorParameters.DRIVE_MOTOR_GEAR_RATIO / MotorParameters.METERS_PER_REV)
+                )
+            driveMotor.setControl(velocitySetter.withVelocity(velocityToSet))
+
+            // Log the actual and set values for debugging
+            log(
+                "drive actual speed " + canCoder.deviceID,
+                driveMotor.velocity.valueAsDouble,
+            )
+            log("drive set speed " + canCoder.deviceID, velocityToSet)
+            log(
+                "steer actual angle " + canCoder.deviceID,
+                canCoder.absolutePosition.valueAsDouble,
+            )
+            log("steer set angle " + canCoder.deviceID, angleToSet)
+            log(
+                "desired state after optimize " + canCoder.deviceID,
+                value.angle.rotations,
+            )
+
+            // Update the state with the optimized values
+            field = value
+        }
+
+    /**
      * Constructs a new SwerveModule.
      *
      * @param driveId The ID of the drive motor.
@@ -68,17 +147,16 @@ class SwerveModule(driveId: Int, steerId: Int, canCoderID: Int, canCoderDriveStr
         positionSetter = PositionTorqueCurrentFOC(0.0)
         velocitySetter = VelocityTorqueCurrentFOC(0.0)
         swerveModulePosition = SwerveModulePosition()
-        state = SwerveModuleState(0.0, Rotation2d.fromDegrees(0.0))
 
         driveConfigs = TalonFXConfiguration()
 
         // Set the PID values for the drive motor
-        driveConfigs.Slot0.kP = PIDParameters.DRIVE_PID_AUTO.getP()
-        driveConfigs.Slot0.kI = PIDParameters.DRIVE_PID_AUTO.getI()
-        driveConfigs.Slot0.kD = PIDParameters.DRIVE_PID_AUTO.getD()
+        driveConfigs.Slot0.kP = PIDParameters.DRIVE_PID_AUTO.p
+        driveConfigs.Slot0.kI = PIDParameters.DRIVE_PID_AUTO.i
+        driveConfigs.Slot0.kD = PIDParameters.DRIVE_PID_AUTO.d
         driveConfigs.Slot0.kV = PIDParameters.DRIVE_PID_AUTO.v
 
-        // Sets the brake mode, invered, and current limits for the drive motor
+        // Sets the brake mode, inverted, and current limits for the drive motor
         driveConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake
         driveConfigs.MotorOutput.Inverted = SwerveParameters.Thresholds.DRIVE_MOTOR_INVERTED
         driveConfigs.CurrentLimits.SupplyCurrentLimit = MotorParameters.DRIVE_SUPPLY_LIMIT
@@ -90,9 +168,9 @@ class SwerveModule(driveId: Int, steerId: Int, canCoderID: Int, canCoderDriveStr
         steerConfigs = TalonFXConfiguration()
 
         // Set the PID values for the steer motor
-        steerConfigs.Slot0.kP = PIDParameters.STEER_PID_AUTO.getP()
-        steerConfigs.Slot0.kI = PIDParameters.STEER_PID_AUTO.getI()
-        steerConfigs.Slot0.kD = PIDParameters.STEER_PID_AUTO.getD()
+        steerConfigs.Slot0.kP = PIDParameters.STEER_PID_AUTO.p
+        steerConfigs.Slot0.kI = PIDParameters.STEER_PID_AUTO.i
+        steerConfigs.Slot0.kD = PIDParameters.STEER_PID_AUTO.d
         steerConfigs.Slot0.kV = 0.0
         steerConfigs.ClosedLoopGeneral.ContinuousWrap = true
 
@@ -109,10 +187,9 @@ class SwerveModule(driveId: Int, steerId: Int, canCoderID: Int, canCoderDriveStr
 
         val canCoderConfiguration = CANcoderConfiguration()
 
-        /*
-     * Sets the CANCoder direction, absolute sensor range, and magnet offset for the CANCoder Make
-     * sure the magnet offset is ACCURATE and based on when the wheel is straight!
-     */
+        // Sets the CANCoder direction, absolute sensor range, and magnet offset for the CANCoder Make
+        // sure the magnet offset is ACCURATE and based on when the wheel is straight!
+
         // canCoderConfiguration.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5; TODO: Change
         // default value
         canCoderConfiguration.MagnetSensor.SensorDirection =
@@ -121,95 +198,17 @@ class SwerveModule(driveId: Int, steerId: Int, canCoderID: Int, canCoderDriveStr
             SwerveParameters.Thresholds.ENCODER_OFFSET + canCoderDriveStraightSteerSetPoint
         canCoderConfiguration.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1.0
 
-        driveMotor.getConfigurator().apply(driveConfigs)
-        steerMotor.getConfigurator().apply(steerConfigs)
-        canCoder.getConfigurator().apply(canCoderConfiguration)
+        driveMotor.configurator.apply(driveConfigs)
+        steerMotor.configurator.apply(steerConfigs)
+        canCoder.configurator.apply(canCoderConfiguration)
 
-        driveVelocity = driveMotor.getVelocity().getValueAsDouble()
-        drivePosition = driveMotor.getPosition().getValueAsDouble()
-        steerVelocity = steerMotor.getVelocity().getValueAsDouble()
-        steerPosition = steerMotor.getPosition().getValueAsDouble()
+        driveVelocity = driveMotor.velocity.valueAsDouble
+        drivePosition = driveMotor.position.valueAsDouble
+        steerVelocity = steerMotor.velocity.valueAsDouble
+        steerPosition = steerMotor.position.valueAsDouble
 
         initializeLoggedNetworkPID()
-        intializeAlarms(driveId, steerId, canCoderID)
-    }
-
-    val position: SwerveModulePosition
-        /**
-         * Gets the current position of the swerve module.
-         *
-         * @return SwerveModulePosition, The current position of the swerve module.
-         */
-        get() {
-            driveVelocity = driveMotor.getVelocity().getValueAsDouble()
-            drivePosition = driveMotor.getPosition().getValueAsDouble()
-            steerVelocity = steerMotor.getVelocity().getValueAsDouble()
-            steerPosition = steerMotor.getPosition().getValueAsDouble()
-
-            swerveModulePosition.angle =
-                Rotation2d.fromRotations(canCoder.getAbsolutePosition().getValueAsDouble())
-            swerveModulePosition.distanceMeters =
-                (drivePosition / MotorParameters.DRIVE_MOTOR_GEAR_RATIO * MotorParameters.METERS_PER_REV)
-
-            return swerveModulePosition
-        }
-
-    /**
-     * Gets the current state of the swerve module.
-     *
-     * @return SwerveModuleState, The current state of the swerve module, including the angle and
-     * speed.
-     */
-    fun getState(): SwerveModuleState {
-        state.angle = Rotation2d.fromRotations(canCoder.getAbsolutePosition().getValueAsDouble())
-        state.speedMetersPerSecond =
-            (driveMotor.getRotorVelocity().getValueAsDouble()
-                    / MotorParameters.DRIVE_MOTOR_GEAR_RATIO
-                    * MotorParameters.METERS_PER_REV)
-        return state
-    }
-
-    /**
-     * Sets the state of the swerve module.
-     *
-     * @param desiredState The desired state of the swerve module.
-     */
-    fun setState(desiredState: SwerveModuleState) {
-        // Get the current angle
-        val currentAngle =
-            Rotation2d.fromRotations(canCoder.getAbsolutePosition().getValueAsDouble())
-
-        // Optimize the desired state based on current angle
-        desiredState.optimize(currentAngle)
-
-        // Set the angle for the steer motor
-        val angleToSet = desiredState.angle.getRotations()
-        steerMotor.setControl(positionSetter.withPosition(angleToSet))
-
-        // Set the velocity for the drive motor
-        val velocityToSet =
-            (desiredState.speedMetersPerSecond
-                    * (MotorParameters.DRIVE_MOTOR_GEAR_RATIO / MotorParameters.METERS_PER_REV))
-        driveMotor.setControl(velocitySetter.withVelocity(velocityToSet))
-
-        // Log the actual and set values for debugging
-        log(
-            "drive actual speed " + canCoder.getDeviceID(),
-            driveMotor.getVelocity().getValueAsDouble()
-        )
-        log("drive set speed " + canCoder.getDeviceID(), velocityToSet)
-        log(
-            "steer actual angle " + canCoder.getDeviceID(),
-            canCoder.getAbsolutePosition().getValueAsDouble()
-        )
-        log("steer set angle " + canCoder.getDeviceID(), angleToSet)
-        log(
-            "desired state after optimize " + canCoder.getDeviceID(),
-            desiredState.angle.getRotations()
-        )
-
-        // Update the state with the optimized values
-        state = desiredState
+        initializeAlarms(driveId, steerId, canCoderID)
     }
 
     /** Stops the swerve module motors.  */
@@ -224,12 +223,15 @@ class SwerveModule(driveId: Int, steerId: Int, canCoderID: Int, canCoderDriveStr
      * @param pid The PID object containing the PID values.
      * @param velocity The velocity value.
      */
-    fun setDrivePID(pid: PIDController, velocity: Double) {
-        driveConfigs.Slot0.kP = pid.getP()
-        driveConfigs.Slot0.kI = pid.getI()
-        driveConfigs.Slot0.kD = pid.getD()
+    fun setDrivePID(
+        pid: PIDController,
+        velocity: Double,
+    ) {
+        driveConfigs.Slot0.kP = pid.p
+        driveConfigs.Slot0.kI = pid.i
+        driveConfigs.Slot0.kD = pid.d
         driveConfigs.Slot0.kV = velocity
-        driveMotor.getConfigurator().apply(driveConfigs)
+        driveMotor.configurator.apply(driveConfigs)
     }
 
     /**
@@ -238,12 +240,15 @@ class SwerveModule(driveId: Int, steerId: Int, canCoderID: Int, canCoderDriveStr
      * @param pid The PID object containing the PID values.
      * @param velocity The velocity value.
      */
-    fun setSteerPID(pid: PIDController, velocity: Double) {
-        steerConfigs.Slot0.kP = pid.getP()
-        steerConfigs.Slot0.kI = pid.getI()
-        steerConfigs.Slot0.kD = pid.getD()
+    fun setSteerPID(
+        pid: PIDController,
+        velocity: Double,
+    ) {
+        steerConfigs.Slot0.kP = pid.p
+        steerConfigs.Slot0.kI = pid.i
+        steerConfigs.Slot0.kD = pid.d
         steerConfigs.Slot0.kV = velocity
-        steerMotor.getConfigurator().apply(steerConfigs)
+        steerMotor.configurator.apply(steerConfigs)
     }
 
     fun applyTelePIDValues() {
@@ -257,8 +262,8 @@ class SwerveModule(driveId: Int, steerId: Int, canCoderID: Int, canCoderDriveStr
         steerConfigs.Slot0.kD = steerD!!.get()
         steerConfigs.Slot0.kV = steerV!!.get()
 
-        driveMotor.getConfigurator().apply(driveConfigs)
-        steerMotor.getConfigurator().apply(steerConfigs)
+        driveMotor.configurator.apply(driveConfigs)
+        steerMotor.configurator.apply(steerConfigs)
     }
 
     /** Sets the PID values for teleoperation mode.  */
@@ -289,27 +294,31 @@ class SwerveModule(driveId: Int, steerId: Int, canCoderID: Int, canCoderDriveStr
         steerV = LoggedNetworkNumber("/Tuning/Steer V", steerConfigs.Slot0.kV)
     }
 
-    fun intializeAlarms(driveID: Int, steerID: Int, canCoderID: Int) {
+    fun initializeAlarms(
+        driveID: Int,
+        steerID: Int,
+        canCoderID: Int,
+    ) {
         driveDisconnectedAlert =
-            Alert("Disconnected drive motor " + driveID.toString() + ".", AlertType.kError)
+            Alert("Disconnected drive motor $driveID.", AlertType.kError)
         turnDisconnectedAlert =
-            Alert("Disconnected turn motor " + steerID.toString() + ".", AlertType.kError)
+            Alert("Disconnected turn motor $steerID.", AlertType.kError)
         canCoderDisconnectedAlert =
-            Alert("Disconnected CANCoder " + canCoderID.toString() + ".", AlertType.kError)
+            Alert("Disconnected CANCoder $canCoderID.", AlertType.kError)
 
-        driveDisconnectedAlert!!.set(!driveMotor.isConnected())
-        turnDisconnectedAlert!!.set(!steerMotor.isConnected())
-        canCoderDisconnectedAlert!!.set(!canCoder.isConnected())
+        driveDisconnectedAlert!!.set(!driveMotor.isConnected)
+        turnDisconnectedAlert!!.set(!steerMotor.isConnected)
+        canCoderDisconnectedAlert!!.set(!canCoder.isConnected)
     }
 
     fun updateTelePID() {
-        PIDParameters.DRIVE_PID_TELE.setP(driveP!!.get())
-        PIDParameters.DRIVE_PID_TELE.setI(driveI!!.get())
-        PIDParameters.DRIVE_PID_TELE.setD(driveD!!.get())
+        PIDParameters.DRIVE_PID_TELE.p = driveP!!.get()
+        PIDParameters.DRIVE_PID_TELE.i = driveI!!.get()
+        PIDParameters.DRIVE_PID_TELE.d = driveD!!.get()
 
-        PIDParameters.STEER_PID_TELE.setP(steerP!!.get())
-        PIDParameters.STEER_PID_TELE.setI(steerI!!.get())
-        PIDParameters.STEER_PID_TELE.setD(steerD!!.get())
+        PIDParameters.STEER_PID_TELE.p = steerP!!.get()
+        PIDParameters.STEER_PID_TELE.i = steerI!!.get()
+        PIDParameters.STEER_PID_TELE.d = steerD!!.get()
 
         applyTelePIDValues()
     }

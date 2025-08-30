@@ -26,7 +26,7 @@ import kotlin.math.sqrt
  * and get the pivot position based on distance calculations.
  */
 object PhotonVision : SubsystemBase() {
-    private val cameras: MutableList<PhotonModule> = ArrayList<PhotonModule>()
+    private val cameras: MutableList<PhotonModule> = ArrayList()
     private var bestCamera: PhotonModule? = null
     private var currentResult: PhotonPipelineResult? = null
 
@@ -74,8 +74,8 @@ object PhotonVision : SubsystemBase() {
                 Rotation3d(
                     0.0,
                     Math.toRadians(360 - PhotonVisionConstants.CAMERA_ONE_ANGLE_DEG),
-                    Math.toRadians(180.0)
-                )
+                    Math.toRadians(180.0),
+                ),
             )
         cameras.add(PhotonModule("Camera", camera1Pos, fieldLayout))
 
@@ -91,7 +91,7 @@ object PhotonVision : SubsystemBase() {
         if (bestCamera == null) return
 
         val results: MutableList<PhotonPipelineResult?>? = bestCamera!!.allUnreadResults
-        currentResult = if (results!!.isEmpty()) null else results.get(0)
+        currentResult = if (results!!.isEmpty()) null else results[0]
 
         if (currentResult == null) return
 
@@ -100,8 +100,8 @@ object PhotonVision : SubsystemBase() {
 
         for (tag in currentResult!!.getTargets()) {
             yaw = tag.getYaw()
-            y = tag.getBestCameraToTarget().getX()
-            dist = tag.getBestCameraToTarget().getZ()
+            y = tag.getBestCameraToTarget().x
+            dist = tag.getBestCameraToTarget().z
         }
 
         // Update dashboard
@@ -116,19 +116,19 @@ object PhotonVision : SubsystemBase() {
     }
 
     private val cameraWithLeastAmbiguity: PhotonModule?
-    /**
-     * Selects the camera with the least pose ambiguity from all available cameras.
-     *
-     * @return The CameraModule with the lowest pose ambiguity, or null if no cameras have valid
-     * targets
-     */
+        /**
+         * Selects the camera with the least pose ambiguity from all available cameras.
+         *
+         * @return The CameraModule with the lowest pose ambiguity, or null if no cameras have valid
+         * targets
+         */
         get() {
             var bestCam: PhotonModule? = null
-            var bestAmbiguity = Double.Companion.MAX_VALUE
+            var bestAmbiguity = Double.MAX_VALUE
 
             for (camera in cameras) {
                 val results: MutableList<PhotonPipelineResult?>? = camera.allUnreadResults
-                if (results == null || results.isEmpty()) continue
+                if (results.isNullOrEmpty()) continue
                 for (result in results) {
                     if (result?.hasTargets() == true) {
                         val target = result.bestTarget
@@ -152,9 +152,7 @@ object PhotonVision : SubsystemBase() {
      *
      * @return true if there is a visible tag, false otherwise
      */
-    fun hasTag(): Boolean {
-        return currentResult != null && currentResult!!.hasTargets()
-    }
+    fun hasTag(): Boolean = currentResult != null && currentResult!!.hasTargets()
 
     /**
      * Gets the estimated global pose of the robot using the best available camera.
@@ -172,15 +170,18 @@ object PhotonVision : SubsystemBase() {
 
     val estimatedGlobalPose: Transform3d
         /**
-         * Gets the estimated global pose of the robot as a Transform3d.
+         * Gets the estimated global pose of the robot as a [Transform3d].
          *
-         * @return The estimated global pose as a Transform3d
+         * @return The estimated global pose as a [Transform3d]
          */
         get() {
-            if (currentResult == null || currentResult!!.getMultiTagResult().isEmpty()) {
+            if (currentResult == null || currentResult!!.multiTagResult.isEmpty) {
                 return Transform3d(0.0, 0.0, 0.0, Rotation3d())
             }
-            return currentResult!!.getMultiTagResult().get().estimatedPose.best
+            return currentResult!!
+                .multiTagResult
+                .get()
+                .estimatedPose.best
         }
 
     val distanceAprilTag: Double
@@ -192,7 +193,7 @@ object PhotonVision : SubsystemBase() {
         get() {
             val pose = this.estimatedGlobalPose
             return sqrt(
-                pose.getTranslation().getX().pow(2.0) + pose.getTranslation().getY().pow(2.0)
+                pose.translation.x.pow(2.0) + pose.translation.y.pow(2.0),
             )
         }
 
@@ -214,11 +215,13 @@ object PhotonVision : SubsystemBase() {
             val b = -447.743 // power 1
             val a = 230.409 // constant
 
-            return ((f * r.pow(5.0))
-                    + (e * r.pow(4.0))
-                    + (d * r.pow(3.0))
-                    + (c * r.pow(2.0))
-                    + (b * r)
-                    + a)
+            return (
+                (f * r.pow(5.0)) +
+                    (e * r.pow(4.0)) +
+                    (d * r.pow(3.0)) +
+                    (c * r.pow(2.0)) +
+                    (b * r) +
+                    a
+            )
         }
 }

@@ -40,8 +40,8 @@ class Robot : LoggedRobot() {
             Logger.setReplaySource(WPILOGReader(logPath)) // Read replay log
             Logger.addDataReceiver(
                 WPILOGWriter(
-                    LogFileUtil.addPathSuffix(logPath, "_sim")
-                )
+                    LogFileUtil.addPathSuffix(logPath, "_sim"),
+                ),
             ) // Save outputs to a new log
         }
 

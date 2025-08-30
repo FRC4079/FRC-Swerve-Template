@@ -11,7 +11,11 @@ import org.photonvision.targeting.PhotonPipelineResult
  * estimator and position information. This class encapsulates all the functionality needed for a
  * single camera to track AprilTags and estimate robot pose.
  */
-class PhotonModule(cameraName: String?, cameraPos: Transform3d?, fieldLayout: AprilTagFieldLayout?) {
+class PhotonModule(
+    cameraName: String?,
+    cameraPos: Transform3d?,
+    fieldLayout: AprilTagFieldLayout?,
+) {
     private val camera: PhotonCamera
 
     /**
@@ -40,7 +44,9 @@ class PhotonModule(cameraName: String?, cameraPos: Transform3d?, fieldLayout: Ap
         this.cameraPosition = cameraPos
         this.poseEstimator =
             PhotonPoseEstimator(
-                fieldLayout, PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, cameraPos
+                fieldLayout,
+                PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                cameraPos,
             )
     }
 
