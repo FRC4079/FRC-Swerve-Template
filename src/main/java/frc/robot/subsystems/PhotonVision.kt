@@ -26,7 +26,7 @@ import kotlin.math.sqrt
  * and get the pivot position based on distance calculations.
  */
 object PhotonVision : SubsystemBase() {
-    private val cameras: MutableList<PhotonModule> = ArrayList<PhotonModule>()
+    private val cameras: MutableList<PhotonModule> = ArrayList()
     private var bestCamera: PhotonModule? = null
     private var currentResult: PhotonPipelineResult? = null
 
@@ -170,9 +170,9 @@ object PhotonVision : SubsystemBase() {
 
     val estimatedGlobalPose: Transform3d
         /**
-         * Gets the estimated global pose of the robot as a Transform3d.
+         * Gets the estimated global pose of the robot as a [Transform3d].
          *
-         * @return The estimated global pose as a Transform3d
+         * @return The estimated global pose as a [Transform3d]
          */
         get() {
             if (currentResult == null || currentResult!!.multiTagResult.isEmpty) {

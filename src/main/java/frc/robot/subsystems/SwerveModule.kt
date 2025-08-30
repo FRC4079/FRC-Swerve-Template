@@ -58,85 +58,6 @@ class SwerveModule(
     private var canCoderDisconnectedAlert: Alert? = null
 
     /**
-     * Constructs a new SwerveModule.
-     *
-     * @param driveId The ID of the drive motor.
-     * @param steerId The ID of the steer motor.
-     * @param canCoderID The ID of the CANcoder.
-     * @param canCoderDriveStraightSteerSetPoint The set point for the CANcoder drive straight steer.
-     */
-    init {
-        driveMotor = TalonFX(driveId)
-        canCoder = CANcoder(canCoderID)
-        steerMotor = TalonFX(steerId)
-        positionSetter = PositionTorqueCurrentFOC(0.0)
-        velocitySetter = VelocityTorqueCurrentFOC(0.0)
-        swerveModulePosition = SwerveModulePosition()
-
-        driveConfigs = TalonFXConfiguration()
-
-        // Set the PID values for the drive motor
-        driveConfigs.Slot0.kP = PIDParameters.DRIVE_PID_AUTO.p
-        driveConfigs.Slot0.kI = PIDParameters.DRIVE_PID_AUTO.i
-        driveConfigs.Slot0.kD = PIDParameters.DRIVE_PID_AUTO.d
-        driveConfigs.Slot0.kV = PIDParameters.DRIVE_PID_AUTO.v
-
-        // Sets the brake mode, invered, and current limits for the drive motor
-        driveConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake
-        driveConfigs.MotorOutput.Inverted = SwerveParameters.Thresholds.DRIVE_MOTOR_INVERTED
-        driveConfigs.CurrentLimits.SupplyCurrentLimit = MotorParameters.DRIVE_SUPPLY_LIMIT
-        driveConfigs.CurrentLimits.SupplyCurrentLimitEnable = true
-        driveConfigs.CurrentLimits.StatorCurrentLimit = MotorParameters.DRIVE_STATOR_LIMIT
-        driveConfigs.CurrentLimits.StatorCurrentLimitEnable = true
-        driveConfigs.Feedback.RotorToSensorRatio = MotorParameters.DRIVE_MOTOR_GEAR_RATIO
-
-        steerConfigs = TalonFXConfiguration()
-
-        // Set the PID values for the steer motor
-        steerConfigs.Slot0.kP = PIDParameters.STEER_PID_AUTO.p
-        steerConfigs.Slot0.kI = PIDParameters.STEER_PID_AUTO.i
-        steerConfigs.Slot0.kD = PIDParameters.STEER_PID_AUTO.d
-        steerConfigs.Slot0.kV = 0.0
-        steerConfigs.ClosedLoopGeneral.ContinuousWrap = true
-
-        // Sets the brake mode, inverted, and current limits for the steer motor
-        steerConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake
-        steerConfigs.MotorOutput.Inverted = SwerveParameters.Thresholds.STEER_MOTOR_INVERTED
-        steerConfigs.Feedback.FeedbackRemoteSensorID = canCoderID
-        steerConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder
-        steerConfigs.Feedback.RotorToSensorRatio = MotorParameters.STEER_MOTOR_GEAR_RATIO
-        steerConfigs.CurrentLimits.SupplyCurrentLimit = MotorParameters.STEER_SUPPLY_LIMIT
-        steerConfigs.CurrentLimits.SupplyCurrentLimitEnable = true
-
-        driveTorqueConfigs = TorqueCurrentConfigs()
-
-        val canCoderConfiguration = CANcoderConfiguration()
-
-        // Sets the CANCoder direction, absolute sensor range, and magnet offset for the CANCoder Make
-        // sure the magnet offset is ACCURATE and based on when the wheel is straight!
-
-        // canCoderConfiguration.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5; TODO: Change
-        // default value
-        canCoderConfiguration.MagnetSensor.SensorDirection =
-            SensorDirectionValue.CounterClockwise_Positive
-        canCoderConfiguration.MagnetSensor.MagnetOffset =
-            SwerveParameters.Thresholds.ENCODER_OFFSET + canCoderDriveStraightSteerSetPoint
-        canCoderConfiguration.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1.0
-
-        driveMotor.configurator.apply(driveConfigs)
-        steerMotor.configurator.apply(steerConfigs)
-        canCoder.configurator.apply(canCoderConfiguration)
-
-        driveVelocity = driveMotor.velocity.valueAsDouble
-        drivePosition = driveMotor.position.valueAsDouble
-        steerVelocity = steerMotor.velocity.valueAsDouble
-        steerPosition = steerMotor.position.valueAsDouble
-
-        initializeLoggedNetworkPID()
-        initializeAlarms(driveId, steerId, canCoderID)
-    }
-
-    /**
      * Gets the current position of the swerve module.
      *
      * Updates the cached drive and steer velocities and positions,
@@ -210,6 +131,85 @@ class SwerveModule(
             // Update the state with the optimized values
             field = value
         }
+
+    /**
+     * Constructs a new SwerveModule.
+     *
+     * @param driveId The ID of the drive motor.
+     * @param steerId The ID of the steer motor.
+     * @param canCoderID The ID of the CANcoder.
+     * @param canCoderDriveStraightSteerSetPoint The set point for the CANcoder drive straight steer.
+     */
+    init {
+        driveMotor = TalonFX(driveId)
+        canCoder = CANcoder(canCoderID)
+        steerMotor = TalonFX(steerId)
+        positionSetter = PositionTorqueCurrentFOC(0.0)
+        velocitySetter = VelocityTorqueCurrentFOC(0.0)
+        swerveModulePosition = SwerveModulePosition()
+
+        driveConfigs = TalonFXConfiguration()
+
+        // Set the PID values for the drive motor
+        driveConfigs.Slot0.kP = PIDParameters.DRIVE_PID_AUTO.p
+        driveConfigs.Slot0.kI = PIDParameters.DRIVE_PID_AUTO.i
+        driveConfigs.Slot0.kD = PIDParameters.DRIVE_PID_AUTO.d
+        driveConfigs.Slot0.kV = PIDParameters.DRIVE_PID_AUTO.v
+
+        // Sets the brake mode, inverted, and current limits for the drive motor
+        driveConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake
+        driveConfigs.MotorOutput.Inverted = SwerveParameters.Thresholds.DRIVE_MOTOR_INVERTED
+        driveConfigs.CurrentLimits.SupplyCurrentLimit = MotorParameters.DRIVE_SUPPLY_LIMIT
+        driveConfigs.CurrentLimits.SupplyCurrentLimitEnable = true
+        driveConfigs.CurrentLimits.StatorCurrentLimit = MotorParameters.DRIVE_STATOR_LIMIT
+        driveConfigs.CurrentLimits.StatorCurrentLimitEnable = true
+        driveConfigs.Feedback.RotorToSensorRatio = MotorParameters.DRIVE_MOTOR_GEAR_RATIO
+
+        steerConfigs = TalonFXConfiguration()
+
+        // Set the PID values for the steer motor
+        steerConfigs.Slot0.kP = PIDParameters.STEER_PID_AUTO.p
+        steerConfigs.Slot0.kI = PIDParameters.STEER_PID_AUTO.i
+        steerConfigs.Slot0.kD = PIDParameters.STEER_PID_AUTO.d
+        steerConfigs.Slot0.kV = 0.0
+        steerConfigs.ClosedLoopGeneral.ContinuousWrap = true
+
+        // Sets the brake mode, inverted, and current limits for the steer motor
+        steerConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake
+        steerConfigs.MotorOutput.Inverted = SwerveParameters.Thresholds.STEER_MOTOR_INVERTED
+        steerConfigs.Feedback.FeedbackRemoteSensorID = canCoderID
+        steerConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder
+        steerConfigs.Feedback.RotorToSensorRatio = MotorParameters.STEER_MOTOR_GEAR_RATIO
+        steerConfigs.CurrentLimits.SupplyCurrentLimit = MotorParameters.STEER_SUPPLY_LIMIT
+        steerConfigs.CurrentLimits.SupplyCurrentLimitEnable = true
+
+        driveTorqueConfigs = TorqueCurrentConfigs()
+
+        val canCoderConfiguration = CANcoderConfiguration()
+
+        // Sets the CANCoder direction, absolute sensor range, and magnet offset for the CANCoder Make
+        // sure the magnet offset is ACCURATE and based on when the wheel is straight!
+
+        // canCoderConfiguration.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5; TODO: Change
+        // default value
+        canCoderConfiguration.MagnetSensor.SensorDirection =
+            SensorDirectionValue.CounterClockwise_Positive
+        canCoderConfiguration.MagnetSensor.MagnetOffset =
+            SwerveParameters.Thresholds.ENCODER_OFFSET + canCoderDriveStraightSteerSetPoint
+        canCoderConfiguration.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1.0
+
+        driveMotor.configurator.apply(driveConfigs)
+        steerMotor.configurator.apply(steerConfigs)
+        canCoder.configurator.apply(canCoderConfiguration)
+
+        driveVelocity = driveMotor.velocity.valueAsDouble
+        drivePosition = driveMotor.position.valueAsDouble
+        steerVelocity = steerMotor.velocity.valueAsDouble
+        steerPosition = steerMotor.position.valueAsDouble
+
+        initializeLoggedNetworkPID()
+        initializeAlarms(driveId, steerId, canCoderID)
+    }
 
     /** Stops the swerve module motors.  */
     fun stop() {
@@ -300,11 +300,11 @@ class SwerveModule(
         canCoderID: Int,
     ) {
         driveDisconnectedAlert =
-            Alert("Disconnected drive motor " + driveID.toString() + ".", AlertType.kError)
+            Alert("Disconnected drive motor $driveID.", AlertType.kError)
         turnDisconnectedAlert =
-            Alert("Disconnected turn motor " + steerID.toString() + ".", AlertType.kError)
+            Alert("Disconnected turn motor $steerID.", AlertType.kError)
         canCoderDisconnectedAlert =
-            Alert("Disconnected CANCoder " + canCoderID.toString() + ".", AlertType.kError)
+            Alert("Disconnected CANCoder $canCoderID.", AlertType.kError)
 
         driveDisconnectedAlert!!.set(!driveMotor.isConnected)
         turnDisconnectedAlert!!.set(!steerMotor.isConnected)
