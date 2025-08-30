@@ -48,12 +48,11 @@ class RobotContainer {
 
     /**
      * Use this method to define your trigger->command mappings. Triggers can be created via the
-     * [Trigger] or our [JoystickButton] constructor with an arbitrary predicate, or via
-     * the named factories in [CommandGenericHID]'s subclasses for [ ]/[CommandPS4Controller] controllers or [CommandJoystick].
+     * [frc.robot.utils.controller.Trigger] or our [JoystickButton] constructor with an arbitrary predicate, or via
+     * the named factories in [edu.wpi.first.wpilibj2.command.button.CommandGenericHID]'s subclasses for [edu.wpi.first.wpilibj2.command.button.CommandXboxController]/[edu.wpi.first.wpilibj2.command.button.CommandPS4Controller] controllers or [edu.wpi.first.wpilibj2.command.button.CommandJoystick].
      */
-    // TODO: Remap bindings
-    private fun configureBindings() {
-        padStart.onTrue(resetPidgey()) // Prev Button: padB
+    private fun configureBindings() { // TODO: Remap bindings
+        padStart.onTrue(resetPidgey())
         padY.onTrue(setTelePid())
     }
 

@@ -37,7 +37,11 @@ object LED : SubsystemBase() {
      * @param g (Green) Integer values between 0 - 255
      * @param b (Blue) Integer values between 0 - 255
      */
-    fun setRGB(r: Int, g: Int, b: Int) {
+    fun setRGB(
+        r: Int,
+        g: Int,
+        b: Int,
+    ) {
         for (i in 0..<addressableLEDBuffer.length) {
             addressableLEDBuffer.setRGB(i, r, g, b)
         }
@@ -51,7 +55,11 @@ object LED : SubsystemBase() {
      * @param s (Saturation) Integer values between 0 - 255
      * @param v (Value) Integer values between 0 - 255
      */
-    fun rainbowHSV(h: Int, s: Int, v: Int) {
+    fun rainbowHSV(
+        h: Int,
+        s: Int,
+        v: Int,
+    ) {
         for (i in 0..<addressableLEDBuffer.length) {
             addressableLEDBuffer.setHSV(i, h, s, v)
         }

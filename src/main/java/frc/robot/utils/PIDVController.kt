@@ -8,14 +8,7 @@ import edu.wpi.first.math.controller.PIDController
  */
 class PIDVController : PIDController {
     /**
-     * Gets the velocity term.
-     *
-     * @return The velocity term.
-     */
-    /**
-     * Sets the velocity term.
-     *
-     * @param v The new velocity term.
+     * The velocity term (kV) used in the PIDVController.
      */
     var v: Double
 
@@ -39,9 +32,9 @@ class PIDVController : PIDController {
      * @param kV The velocity term.
      */
     constructor(controller: PIDController, kV: Double) : super(
-        controller.getP(),
-        controller.getI(),
-        controller.getD()
+        controller.p,
+        controller.i,
+        controller.d,
     ) {
         v = kV
     }
