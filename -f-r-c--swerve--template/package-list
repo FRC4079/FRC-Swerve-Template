@@ -95,7 +95,6 @@ $dokka.location:frc.robot.subsystems/SwerveModule/stop/#/PointingToDeclaration/
 $dokka.location:frc.robot.subsystems/SwerveModule/updateTelePID/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/update-tele-p-i-d.html
 $dokka.location:frc.robot.utils.controller////PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/index.html
 $dokka.location:frc.robot.utils.controller/Axis///PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-axis/index.html
-$dokka.location:frc.robot.utils.controller/Button///PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-button/index.html
 $dokka.location:frc.robot.utils.controller/GamingController///PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/index.html
 $dokka.location:frc.robot.utils.controller/GamingController/GamingController/#kotlin.Int/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/-gaming-controller.html
 $dokka.location:frc.robot.utils.controller/GamingController/checkDPad/#kotlin.Double#kotlin.Boolean/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/check-d-pad.html
@@ -170,9 +169,9 @@ $dokka.location:frc.robot/Robot/robotPeriodic/#/PointingToDeclaration/-f-r-c--s
 $dokka.location:frc.robot/Robot/teleopInit/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot/-robot/teleop-init.html
 $dokka.location:frc.robot/Robot/testInit/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot/-robot/test-init.html
 $dokka.location:frc.robot/RobotContainer///PointingToDeclaration/-f-r-c--swerve--template/frc.robot/-robot-container/index.html
-$dokka.location:frc.robot/RobotContainer/RobotContainer/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot/-robot-container/-robot-container.html
 $dokka.location:frc.robot/RobotContainer/getAutonomousCommand/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot/-robot-container/get-autonomous-command.html
 $dokka.location:frc.robot/RobotContainer/getNetworkChooser/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot/-robot-container/get-network-chooser.html
+$dokka.location:frc.robot/RobotContainer/getPad/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot/-robot-container/get-pad.html
 $dokka.location:frc.robot/RobotContainer/setNetworkChooser/#org.littletonrobotics.junction.networktables.LoggedDashboardChooser[edu.wpi.first.wpilibj2.command.Command?]/PointingToDeclaration/-f-r-c--swerve--template/frc.robot/-robot-container/set-network-chooser.html
 frc.robot
 frc.robot.commands
