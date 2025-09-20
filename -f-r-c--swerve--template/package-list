@@ -137,11 +137,6 @@ $dokka.location:frc.robot.utils/Direction///PointingToDeclaration/-f-r-c--swerv
 $dokka.location:frc.robot.utils/Direction/getEntries/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-direction/get-entries.html
 $dokka.location:frc.robot.utils/Direction/valueOf/#kotlin.String/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-direction/value-of.html
 $dokka.location:frc.robot.utils/Direction/values/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-direction/values.html
-$dokka.location:frc.robot.utils/Kommand///PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-kommand/index.html
-$dokka.location:frc.robot.utils/Kommand/drive/#frc.robot.utils.controller.GamingController#kotlin.Boolean/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-kommand/drive.html
-$dokka.location:frc.robot.utils/Kommand/resetPidgey/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-kommand/reset-pidgey.html
-$dokka.location:frc.robot.utils/Kommand/setTelePid/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-kommand/set-tele-pid.html
-$dokka.location:frc.robot.utils/Kommand/waitCmd/#kotlin.Double/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-kommand/wait-cmd.html
 $dokka.location:frc.robot.utils/PIDVController///PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-p-i-d-v-controller/index.html
 $dokka.location:frc.robot.utils/PIDVController/PIDVController/#edu.wpi.first.math.controller.PIDController#kotlin.Double/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-p-i-d-v-controller/-p-i-d-v-controller.html
 $dokka.location:frc.robot.utils/PIDVController/PIDVController/#kotlin.Double#kotlin.Double#kotlin.Double#kotlin.Double/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-p-i-d-v-controller/-p-i-d-v-controller.html
