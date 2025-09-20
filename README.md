@@ -1,6 +1,6 @@
 # FRC 4079 - Swerve Drive Template
 
-<img src="https://www.chiefdelphi.com/uploads/default/original/3X/f/d/fd762c4da154fc48e4e1e955e03be81fda85c34b.jpeg" height="400" width="65ush0">
+<img src="https://www.chiefdelphi.com/uploads/default/original/3X/f/d/fd762c4da154fc48e4e1e955e03be81fda85c34b.jpeg" height="400" width="650">
 
 A comprehensive swerve drive template for FRC robots written in Kotlin, featuring advanced logging, vision processing, and autonomous capabilities.
 
