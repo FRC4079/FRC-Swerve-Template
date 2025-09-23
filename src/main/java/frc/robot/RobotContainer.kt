@@ -42,6 +42,7 @@ class RobotContainer {
      * [Trigger] or our [JoystickButton] constructor with an arbitrary predicate, or via
      * the named factories in [CommandGenericHID]'s subclasses for [ ]/[CommandPS4Controller] controllers or [CommandJoystick].
      */
+    // TODO: Remap bindings
     private fun configureBindings() {
         pad.bindings {
             press(Y) { setTelePid() }

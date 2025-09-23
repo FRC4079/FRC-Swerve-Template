@@ -10,9 +10,7 @@ import frc.robot.utils.controller.Trigger.LEFT
 import frc.robot.utils.controller.Trigger.RIGHT
 
 /** A class representing a Logitech Gaming Pad.  */
-class GamingController(
-    usbPort: Int,
-) : XboxController(usbPort) {
+class GamingController(usbPort: Int) : XboxController(usbPort) {
     private val gamepad: Joystick
 
     /**
@@ -72,17 +70,29 @@ class GamingController(
          */
         get() = gamepad.getRawAxis(RIGHT_ANALOG_Y)
 
-    override fun getAButton(): Boolean = gamepad.getRawButton(A)
+    override fun getAButton(): Boolean {
+        return gamepad.getRawButton(A)
+    }
 
-    override fun getBButton(): Boolean = gamepad.getRawButton(B)
+    override fun getBButton(): Boolean {
+        return gamepad.getRawButton(B)
+    }
 
-    override fun getXButton(): Boolean = gamepad.getRawButton(X)
+    override fun getXButton(): Boolean {
+        return gamepad.getRawButton(X)
+    }
 
-    override fun getYButton(): Boolean = gamepad.getRawButton(Y)
+    override fun getYButton(): Boolean {
+        return gamepad.getRawButton(Y)
+    }
 
-    override fun getBackButton(): Boolean = gamepad.getRawButton(BACK)
+    override fun getBackButton(): Boolean {
+        return gamepad.getRawButton(BACK)
+    }
 
-    override fun getStartButton(): Boolean = gamepad.getRawButton(START)
+    override fun getStartButton(): Boolean {
+        return gamepad.getRawButton(START)
+    }
 
     val dPadUp: Boolean
         get() = checkDPad(0)
@@ -102,7 +112,9 @@ class GamingController(
      * @param index The index of the DPad direction.
      * @return True if the DPad is pressed in the specified direction, false otherwise.
      */
-    fun checkDPad(index: Int): Boolean = 0 <= index && index <= 7 && (index * 45) == gamepad.getPOV()
+    fun checkDPad(index: Int): Boolean {
+        return 0 <= index && index <= 7 && (index * 45) == gamepad.getPOV()
+    }
 
     /**
      * Checks if the DPad is pressed at a specific angle.
@@ -111,10 +123,7 @@ class GamingController(
      * @param inDegrees Whether the angle is in degrees.
      * @return True if the DPad is pressed at the specified angle, false otherwise.
      */
-    fun checkDPad(
-        angle: Double,
-        inDegrees: Boolean,
-    ): Boolean {
+    fun checkDPad(angle: Double, inDegrees: Boolean): Boolean {
         val angdeg = if (inDegrees) angle else Math.toDegrees(angle)
         return angdeg.toInt() == gamepad.getPOV()
     }
@@ -136,14 +145,18 @@ class GamingController(
      * @param inDegrees Whether to return the value in degrees.
      * @return The DPad value in degrees or radians.
      */
-    fun getDPad(inDegrees: Boolean): Double = if (inDegrees) gamepad.getPOV().toDouble() else Math.toRadians(gamepad.getPOV().toDouble())
+    fun getDPad(inDegrees: Boolean): Double {
+        return if (inDegrees) gamepad.getPOV().toDouble() else Math.toRadians(gamepad.getPOV().toDouble())
+    }
 
     /**
      * Checks if the DPad is pressed.
      *
      * @return True if the DPad is pressed, false otherwise.
      */
-    fun dPadIsPressed(): Boolean = gamepad.getPOV() != -1
+    fun dPadIsPressed(): Boolean {
+        return gamepad.getPOV() != -1
+    }
 
     /**
      * Sets the rumble amount for the gamepad.
@@ -155,7 +168,11 @@ class GamingController(
         gamepad.setRumble(RumbleType.kRightRumble, amount.toDouble())
     }
 
-    override fun getRawAxis(which: Int): Double = gamepad.getRawAxis(which)
+    override fun getRawAxis(which: Int): Double {
+        return gamepad.getRawAxis(which)
+    }
 
-    override fun getRawButton(button: Int): Boolean = gamepad.getRawButton(button)
+    override fun getRawButton(button: Int): Boolean {
+        return gamepad.getRawButton(button)
+    }
 }
