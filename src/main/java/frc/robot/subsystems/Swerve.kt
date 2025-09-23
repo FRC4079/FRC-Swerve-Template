@@ -42,35 +42,31 @@ object Swerve : SubsystemBase() {
     private var currentPose: Pose2d? = Pose2d(0.0, 0.0, Rotation2d(0.0))
     private var pathToScore: PathPlannerPath? = null
 
-    var swerveLoggingThread: Thread =
-        Thread(
-            Runnable {
-                while (true) {
-                    log<SwerveModuleState?>("Swerve Module States", *this.moduleStates)
-                    try {
-                        Thread.sleep(100)
-                    } catch (e: InterruptedException) {
-                        Thread.currentThread().interrupt()
-                        break
-                    }
+    var swerveLoggingThread: Thread = Thread(
+        Runnable {
+            while (true) {
+                log<SwerveModuleState?>("Swerve Module States", *this.moduleStates)
+                try {
+                    Thread.sleep(100)
+                } catch (e: InterruptedException) {
+                    Thread.currentThread().interrupt()
+                    break
                 }
-            },
-        )
+            }
+        })
 
-    var swerveLoggingThreadBeforeSet: Thread =
-        Thread(
-            Runnable {
-                while (true) {
-                    log<SwerveModuleState?>("Set Swerve Module States", *setStates)
-                    try {
-                        Thread.sleep(100)
-                    } catch (e: InterruptedException) {
-                        Thread.currentThread().interrupt()
-                        break
-                    }
+    var swerveLoggingThreadBeforeSet: Thread = Thread(
+        Runnable {
+            while (true) {
+                log<SwerveModuleState?>("Set Swerve Module States", *setStates)
+                try {
+                    Thread.sleep(100)
+                } catch (e: InterruptedException) {
+                    Thread.currentThread().interrupt()
+                    break
                 }
-            },
-        )
+            }
+        })
 
     // from feeder to the goal and align itself
     // The plan is for it to path towards it then we use a set path to align itself with the goal and
@@ -105,46 +101,48 @@ object Swerve : SubsystemBase() {
      *
      * @return SwerveModule[], An array of initialized SwerveModule objects.
      */
-    private fun initializeModules(): Array<SwerveModule> =
-        arrayOf<SwerveModule>(
+    private fun initializeModules(): Array<SwerveModule> {
+        return arrayOf<SwerveModule>(
             SwerveModule(
                 MotorParameters.FRONT_LEFT_DRIVE_ID,
                 MotorParameters.FRONT_LEFT_STEER_ID,
                 MotorParameters.FRONT_LEFT_CAN_CODER_ID,
-                SwerveParameters.Thresholds.CANCODER_VAL9,
+                SwerveParameters.Thresholds.CANCODER_VAL9
             ),
             SwerveModule(
                 MotorParameters.FRONT_RIGHT_DRIVE_ID,
                 MotorParameters.FRONT_RIGHT_STEER_ID,
                 MotorParameters.FRONT_RIGHT_CAN_CODER_ID,
-                SwerveParameters.Thresholds.CANCODER_VAL10,
+                SwerveParameters.Thresholds.CANCODER_VAL10
             ),
             SwerveModule(
                 MotorParameters.BACK_LEFT_DRIVE_ID,
                 MotorParameters.BACK_LEFT_STEER_ID,
                 MotorParameters.BACK_LEFT_CAN_CODER_ID,
-                SwerveParameters.Thresholds.CANCODER_VAL11,
+                SwerveParameters.Thresholds.CANCODER_VAL11
             ),
             SwerveModule(
                 MotorParameters.BACK_RIGHT_DRIVE_ID,
                 MotorParameters.BACK_RIGHT_STEER_ID,
                 MotorParameters.BACK_RIGHT_CAN_CODER_ID,
-                SwerveParameters.Thresholds.CANCODER_VAL12,
-            ),
+                SwerveParameters.Thresholds.CANCODER_VAL12
+            )
         )
+    }
 
     /**
      * Initializes the PID controller.
      *
      * @return PIDController, A new PID object with values from the SmartDashboard.
      */
-    private fun initializePID(): PIDVController =
-        PIDVController(
+    private fun initializePID(): PIDVController {
+        return PIDVController(
             SmartDashboard.getNumber("AUTO: P", PIDParameters.DRIVE_PID_AUTO.p),
             SmartDashboard.getNumber("AUTO: I", PIDParameters.DRIVE_PID_AUTO.i),
             SmartDashboard.getNumber("AUTO: D", PIDParameters.DRIVE_PID_AUTO.d),
-            SmartDashboard.getNumber("AUTO: V", PIDParameters.DRIVE_PID_AUTO.v),
+            SmartDashboard.getNumber("AUTO: V", PIDParameters.DRIVE_PID_AUTO.v)
         )
+    }
 
     /**
      * Initializes the SwerveDrivePoseEstimator. The SwerveDrivePoseEsimator estimates the robot's
@@ -152,13 +150,14 @@ object Swerve : SubsystemBase() {
      *
      * @return SwerveDrivePoseEstimator, A new SwerveDrivePoseEstimator object.
      */
-    private fun initializePoseEstimator(): SwerveDrivePoseEstimator =
-        SwerveDrivePoseEstimator(
+    private fun initializePoseEstimator(): SwerveDrivePoseEstimator {
+        return SwerveDrivePoseEstimator(
             SwerveParameters.PhysicalParameters.kinematics,
             Rotation2d.fromDegrees(this.heading),
             this.modulePositions,
-            Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
+            Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0))
         )
+    }
 
     /**
      * Configures the AutoBuilder for autonomous driving. READ DOCUMENTATION TO PUT IN CORRECT VALUES
@@ -172,8 +171,7 @@ object Swerve : SubsystemBase() {
             Supplier { this.autoSpeeds },
             Consumer { chassisSpeeds: ChassisSpeeds? -> this.chassisSpeedsDrive(chassisSpeeds) },
             PPHolonomicDriveController(
-                PIDConstants(5.0, 0.0, 0.0),
-                PIDConstants(5.0, 0.0, 0.0),
+                PIDConstants(5.0, 0.0, 0.0), PIDConstants(5.0, 0.0, 0.0)
             ),
             PIDParameters.config,
             BooleanSupplier {
@@ -187,7 +185,7 @@ object Swerve : SubsystemBase() {
                     return@BooleanSupplier alliance.get() != Alliance.Blue
                 }
             },
-            this,
+            this
         )
     }
 
@@ -198,7 +196,7 @@ object Swerve : SubsystemBase() {
     override fun periodic() {
         /*
              This method checks whether the bot is in Teleop, and adds it to poseEstimator based on VISION
-         */
+            */
 
         if (DriverStation.isTeleop()) {
             val estimatedPose: EstimatedRobotPose? =
@@ -213,7 +211,7 @@ object Swerve : SubsystemBase() {
 
         /*
      Updates the robot position based on movement and rotation from the pidgey and encoders.
-         */
+    */
         poseEstimator.update(this.pidgeyRotation, this.modulePositions)
 
         field.robotPose = poseEstimator.estimatedPosition
@@ -232,26 +230,19 @@ object Swerve : SubsystemBase() {
      * @param isFieldOriented Whether the drive is field-oriented.
      */
     fun setDriveSpeeds(
-        forwardSpeed: Double,
-        leftSpeed: Double,
-        turnSpeed: Double,
-        isFieldOriented: Boolean,
+        forwardSpeed: Double, leftSpeed: Double, turnSpeed: Double, isFieldOriented: Boolean
     ) {
         log("Forward speed", forwardSpeed)
         log("Left speed", leftSpeed)
 
         // Converts to a measure that the robot aktualy understands
         var speeds =
-            if (isFieldOriented) {
+            if (isFieldOriented)
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                    forwardSpeed,
-                    leftSpeed,
-                    turnSpeed,
-                    this.pidgeyRotation,
+                    forwardSpeed, leftSpeed, turnSpeed, this.pidgeyRotation
                 )
-            } else {
+            else
                 ChassisSpeeds(forwardSpeed, leftSpeed, turnSpeed)
-            }
 
         speeds = ChassisSpeeds.discretize(speeds, 0.02)
 
@@ -304,7 +295,7 @@ object Swerve : SubsystemBase() {
         poseEstimator.resetPosition(
             Rotation2d.fromDegrees(this.heading),
             this.modulePositions,
-            Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
+            Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0))
         )
     }
 
@@ -360,7 +351,6 @@ object Swerve : SubsystemBase() {
             }
             return moduleStates
         }
-
         /**
          * Sets the states of the swerve modules.
          *
@@ -421,7 +411,11 @@ object Swerve : SubsystemBase() {
         }
     }
 
-    fun pathFindToGoal(): Command? = AutoBuilder.pathfindThenFollowPath(pathToScore, constraints)
+    fun pathFindToGoal(): Command? {
+        return AutoBuilder.pathfindThenFollowPath(pathToScore, constraints)
+    }
 
-    fun pathFindTest(): Command? = AutoBuilder.pathfindThenFollowPath(pathToScore, constraints)
+    fun pathFindTest(): Command? {
+        return AutoBuilder.pathfindThenFollowPath(pathToScore, constraints)
+    }
 }

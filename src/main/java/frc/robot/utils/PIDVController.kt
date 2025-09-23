@@ -12,6 +12,11 @@ class PIDVController : PIDController {
      *
      * @return The velocity term.
      */
+    /**
+     * Sets the velocity term.
+     *
+     * @param v The new velocity term.
+     */
     var v: Double
 
     /**
@@ -36,7 +41,7 @@ class PIDVController : PIDController {
     constructor(controller: PIDController, kV: Double) : super(
         controller.getP(),
         controller.getI(),
-        controller.getD(),
+        controller.getD()
     ) {
         v = kV
     }
