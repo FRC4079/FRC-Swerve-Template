@@ -11,7 +11,10 @@ import frc.robot.utils.controller.GamingController
 import kotlin.math.abs
 
 /** Command to control the robot's swerve drive using a Logitech gaming pad.  */
-class PadDrive(private val pad: GamingController, private val isFieldOriented: Boolean) : Command() {
+class PadDrive(
+    private val pad: GamingController,
+    private val isFieldOriented: Boolean,
+) : Command() {
     /**
      * Constructs a new PadDrive command.
      *
@@ -31,10 +34,11 @@ class PadDrive(private val pad: GamingController, private val isFieldOriented: B
         val position: Pair<Double, Double> = positionSet(pad)
 
         val rotation =
-            if (abs(pad.rightAnalogXAxis) >= 0.1)
+            if (abs(pad.rightAnalogXAxis) >= 0.1) {
                 -pad.rightAnalogXAxis * RobotParameters.MotorParameters.MAX_ANGULAR_SPEED
-            else
+            } else {
                 0.0
+            }
 
         log("X Joystick", position.first!!)
         log("Y Joystick", position.second!!)
@@ -49,9 +53,7 @@ class PadDrive(private val pad: GamingController, private val isFieldOriented: B
      *
      * @return Always returns false, as this command never ends on its own.
      */
-    override fun isFinished(): Boolean {
-        return false
-    }
+    override fun isFinished(): Boolean = false
 
     companion object {
         /**

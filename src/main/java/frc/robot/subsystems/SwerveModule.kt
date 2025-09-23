@@ -23,13 +23,18 @@ import frc.robot.utils.RobotParameters.SwerveParameters.PIDParameters
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
 /** Represents a swerve module used in a swerve drive system.  */
-class SwerveModule(driveId: Int, steerId: Int, canCoderID: Int, canCoderDriveStraightSteerSetPoint: Double) {
-    private val driveMotor: TalonFX
-    private val canCoder: CANcoder
-    private val steerMotor: TalonFX
-    private val positionSetter: PositionTorqueCurrentFOC
-    private val velocitySetter: VelocityTorqueCurrentFOC
-    private val swerveModulePosition: SwerveModulePosition
+class SwerveModule(
+    driveId: Int,
+    steerId: Int,
+    canCoderID: Int,
+    canCoderDriveStraightSteerSetPoint: Double,
+) {
+    private val driveMotor: TalonFX = TalonFX(driveId)
+    private val canCoder: CANcoder = CANcoder(canCoderID)
+    private val steerMotor: TalonFX = TalonFX(steerId)
+    private val positionSetter: PositionTorqueCurrentFOC = PositionTorqueCurrentFOC(0.0)
+    private val velocitySetter: VelocityTorqueCurrentFOC = VelocityTorqueCurrentFOC(0.0)
+    private val swerveModulePosition: SwerveModulePosition = SwerveModulePosition()
     private var state: SwerveModuleState
     private var driveVelocity: Double
     private var drivePosition: Double
@@ -62,12 +67,6 @@ class SwerveModule(driveId: Int, steerId: Int, canCoderID: Int, canCoderDriveStr
      * @param canCoderDriveStraightSteerSetPoint The set point for the CANcoder drive straight steer.
      */
     init {
-        driveMotor = TalonFX(driveId)
-        canCoder = CANcoder(canCoderID)
-        steerMotor = TalonFX(steerId)
-        positionSetter = PositionTorqueCurrentFOC(0.0)
-        velocitySetter = VelocityTorqueCurrentFOC(0.0)
-        swerveModulePosition = SwerveModulePosition()
         state = SwerveModuleState(0.0, Rotation2d.fromDegrees(0.0))
 
         driveConfigs = TalonFXConfiguration()
@@ -109,10 +108,6 @@ class SwerveModule(driveId: Int, steerId: Int, canCoderID: Int, canCoderDriveStr
 
         val canCoderConfiguration = CANcoderConfiguration()
 
-        /*
-     * Sets the CANCoder direction, absolute sensor range, and magnet offset for the CANCoder Make
-     * sure the magnet offset is ACCURATE and based on when the wheel is straight!
-     */
         // canCoderConfiguration.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5; TODO: Change
         // default value
         canCoderConfiguration.MagnetSensor.SensorDirection =
@@ -163,9 +158,11 @@ class SwerveModule(driveId: Int, steerId: Int, canCoderID: Int, canCoderDriveStr
     fun getState(): SwerveModuleState {
         state.angle = Rotation2d.fromRotations(canCoder.getAbsolutePosition().getValueAsDouble())
         state.speedMetersPerSecond =
-            (driveMotor.getRotorVelocity().getValueAsDouble()
-                    / MotorParameters.DRIVE_MOTOR_GEAR_RATIO
-                    * MotorParameters.METERS_PER_REV)
+            (
+                driveMotor.getRotorVelocity().getValueAsDouble() /
+                    MotorParameters.DRIVE_MOTOR_GEAR_RATIO
+                    * MotorParameters.METERS_PER_REV
+            )
         return state
     }
 
@@ -188,24 +185,26 @@ class SwerveModule(driveId: Int, steerId: Int, canCoderID: Int, canCoderDriveStr
 
         // Set the velocity for the drive motor
         val velocityToSet =
-            (desiredState.speedMetersPerSecond
-                    * (MotorParameters.DRIVE_MOTOR_GEAR_RATIO / MotorParameters.METERS_PER_REV))
+            (
+                desiredState.speedMetersPerSecond
+                    * (MotorParameters.DRIVE_MOTOR_GEAR_RATIO / MotorParameters.METERS_PER_REV)
+            )
         driveMotor.setControl(velocitySetter.withVelocity(velocityToSet))
 
         // Log the actual and set values for debugging
         log(
             "drive actual speed " + canCoder.getDeviceID(),
-            driveMotor.getVelocity().getValueAsDouble()
+            driveMotor.getVelocity().getValueAsDouble(),
         )
         log("drive set speed " + canCoder.getDeviceID(), velocityToSet)
         log(
             "steer actual angle " + canCoder.getDeviceID(),
-            canCoder.getAbsolutePosition().getValueAsDouble()
+            canCoder.getAbsolutePosition().getValueAsDouble(),
         )
         log("steer set angle " + canCoder.getDeviceID(), angleToSet)
         log(
             "desired state after optimize " + canCoder.getDeviceID(),
-            desiredState.angle.getRotations()
+            desiredState.angle.getRotations(),
         )
 
         // Update the state with the optimized values
@@ -224,7 +223,10 @@ class SwerveModule(driveId: Int, steerId: Int, canCoderID: Int, canCoderDriveStr
      * @param pid The PID object containing the PID values.
      * @param velocity The velocity value.
      */
-    fun setDrivePID(pid: PIDController, velocity: Double) {
+    fun setDrivePID(
+        pid: PIDController,
+        velocity: Double,
+    ) {
         driveConfigs.Slot0.kP = pid.getP()
         driveConfigs.Slot0.kI = pid.getI()
         driveConfigs.Slot0.kD = pid.getD()
@@ -238,7 +240,10 @@ class SwerveModule(driveId: Int, steerId: Int, canCoderID: Int, canCoderDriveStr
      * @param pid The PID object containing the PID values.
      * @param velocity The velocity value.
      */
-    fun setSteerPID(pid: PIDController, velocity: Double) {
+    fun setSteerPID(
+        pid: PIDController,
+        velocity: Double,
+    ) {
         steerConfigs.Slot0.kP = pid.getP()
         steerConfigs.Slot0.kI = pid.getI()
         steerConfigs.Slot0.kD = pid.getD()
@@ -289,7 +294,11 @@ class SwerveModule(driveId: Int, steerId: Int, canCoderID: Int, canCoderDriveStr
         steerV = LoggedNetworkNumber("/Tuning/Steer V", steerConfigs.Slot0.kV)
     }
 
-    fun intializeAlarms(driveID: Int, steerID: Int, canCoderID: Int) {
+    fun intializeAlarms(
+        driveID: Int,
+        steerID: Int,
+        canCoderID: Int,
+    ) {
         driveDisconnectedAlert =
             Alert("Disconnected drive motor " + driveID.toString() + ".", AlertType.kError)
         turnDisconnectedAlert =
