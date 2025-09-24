@@ -6,12 +6,6 @@ import frc.robot.utils.controller.Axis.LEFT_ANALOG_X
 import frc.robot.utils.controller.Axis.LEFT_ANALOG_Y
 import frc.robot.utils.controller.Axis.RIGHT_ANALOG_X
 import frc.robot.utils.controller.Axis.RIGHT_ANALOG_Y
-import frc.robot.utils.controller.Button.A
-import frc.robot.utils.controller.Button.B
-import frc.robot.utils.controller.Button.BACK
-import frc.robot.utils.controller.Button.START
-import frc.robot.utils.controller.Button.X
-import frc.robot.utils.controller.Button.Y
 import frc.robot.utils.controller.Trigger.LEFT
 import frc.robot.utils.controller.Trigger.RIGHT
 
