@@ -14,6 +14,7 @@ import org.photonvision.targeting.PhotonPipelineResult
 import org.photonvision.targeting.PhotonTrackedTarget
 import kotlin.math.pow
 import kotlin.math.sqrt
+import xyz.malefic.frc.sub.PhotonModule
 
 /**
  * The PhotonVision class is a subsystem that interfaces with multiple PhotonVision cameras to
