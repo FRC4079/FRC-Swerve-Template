@@ -1,6 +1,7 @@
 package frc.robot
 
 import com.pathplanner.lib.commands.PathPlannerAuto
+import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import frc.robot.commands.Kommand.drive
@@ -10,6 +11,8 @@ import frc.robot.subsystems.Swerve
 import frc.robot.utils.RobotParameters.SwerveParameters.Thresholds
 import frc.robot.utils.controller.GamingController
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
+import xyz.malefic.frc.emu.Button.*
+import xyz.malefic.frc.pingu.Bingu.bindings
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -18,26 +21,14 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 class RobotContainer {
-    private val padA: JoystickButton
-    private val padB: JoystickButton
-    private val padX: JoystickButton
-    private val padY: JoystickButton
-    private val padStart: JoystickButton
-    private val padLeftBumper: JoystickButton
-    private val padRightBumper: JoystickButton
+
+    val pad: XboxController = XboxController(1)
 
     var networkChooser: LoggedDashboardChooser<Command?> = LoggedDashboardChooser<Command?>("AutoChooser")
 
     /** The container for the robot. Contains subsystems, OI devices, and commands.  */
     init {
         val pad = GamingController(0)
-        padStart = JoystickButton(pad, 8)
-        padA = JoystickButton(pad, 1)
-        padB = JoystickButton(pad, 2)
-        padX = JoystickButton(pad, 3)
-        padY = JoystickButton(pad, 4)
-        padLeftBumper = JoystickButton(pad, 5)
-        padRightBumper = JoystickButton(pad, 6)
 
         Swerve.defaultCommand = drive(pad, Thresholds.IS_FIELD_ORIENTED)
 
@@ -53,8 +44,11 @@ class RobotContainer {
      */
     // TODO: Remap bindings
     private fun configureBindings() {
-        padStart.onTrue(resetPidgey()) // Prev Button: padB
-        padY.onTrue(setTelePid())
+
+        pad.bindings {
+            press(Y) { setTelePid() }
+            press(START) { resetPidgey() }
+        }
     }
 
     val autonomousCommand: Command?
