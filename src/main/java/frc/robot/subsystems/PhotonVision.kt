@@ -16,6 +16,7 @@ import xyz.malefic.frc.pingu.LogPingu.logs
 import xyz.malefic.frc.sub.PhotonModule
 import kotlin.math.pow
 import kotlin.math.sqrt
+import xyz.malefic.frc.sub.PhotonModule
 
 /**
  * The PhotonVision class is a subsystem that interfaces with multiple PhotonVision cameras to

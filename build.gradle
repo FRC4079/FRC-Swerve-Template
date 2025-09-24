@@ -99,7 +99,7 @@ dependencies {
     def akitJson = new JsonSlurper().parseText(new File(projectDir.getAbsolutePath() + "/vendordeps/AdvantageKit.json").text)
     annotationProcessor "org.littletonrobotics.akit:akit-autolog:$akitJson.version"
 
-    implementation(libs.malefix)
+    implementation libs.malefix
 }
 
 test {
