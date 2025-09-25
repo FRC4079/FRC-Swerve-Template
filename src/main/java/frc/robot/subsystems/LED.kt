@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.AddressableLED
 import edu.wpi.first.wpilibj.AddressableLEDBuffer
 import edu.wpi.first.wpilibj.RobotState
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import frc.robot.utils.Color
 import kotlin.math.sin
 
 object LED : SubsystemBase() {
@@ -33,6 +34,15 @@ object LED : SubsystemBase() {
     /**
      * Sets the color for each of the LEDs based on RGB values.
      *
+     * @param color The color to set the LEDs to.
+     */
+    fun setRGB(color: Color) {
+        val (r, g, b) = color.rgb
+        setRGB(r, g, b)
+    }
+
+    /**
+     * Sets the color for each of the LEDs based on RGB values.
      * @param r (Red) Integer values between 0 - 255
      * @param g (Green) Integer values between 0 - 255
      * @param b (Blue) Integer values between 0 - 255
@@ -55,7 +65,7 @@ object LED : SubsystemBase() {
      * @param s (Saturation) Integer values between 0 - 255
      * @param v (Value) Integer values between 0 - 255
      */
-    fun rainbowHSV(
+    fun setHSV(
         h: Int,
         s: Int,
         v: Int,
@@ -64,39 +74,6 @@ object LED : SubsystemBase() {
             addressableLEDBuffer.setHSV(i, h, s, v)
         }
         alignmentIndication1.setData(addressableLEDBuffer)
-    }
-
-    /** Sets the LED color to tan.  */
-    fun setTan() {
-        setRGB(255, 122, 20)
-    }
-
-    /** Sets the LED color to red.  */
-    fun setRed() {
-        setRGB(255, 0, 0)
-    }
-
-    /** Sets the LED color to green.  */
-    fun setGreen() {
-        setRGB(0, 255, 0)
-    }
-
-    /**
-     * Sets the LED color to orange. This is a specific shade of orange that is used for the LED
-     * strip.
-     */
-    fun setOrange() {
-        setRGB(255, 165, 0)
-    }
-
-    /** Sets the LED color to purple.  */
-    fun setPurpleColor() {
-        setRGB(160, 32, 240)
-    }
-
-    /** Sets the LED color to high tide (a specific shade of blue-green).  */
-    fun setHighTide() {
-        setRGB(0, 182, 174)
     }
 
     /**
@@ -115,9 +92,7 @@ object LED : SubsystemBase() {
 
             wave = (wave + 1) / 2
 
-            val r = (wave * 0).toInt()
-            val g = (wave * 200).toInt()
-            val b = (wave * 50).toInt()
+            val (r, g, b) = Color.HIGH_TIDE.rgb.toList().map { (it * wave).toInt() }
 
             addressableLEDBuffer.setRGB(i, r, g, b)
         }
