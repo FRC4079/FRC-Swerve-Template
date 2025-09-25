@@ -4,9 +4,9 @@ import com.ctre.phoenix6.signals.InvertedValue
 import com.pathplanner.lib.config.PIDConstants
 import com.pathplanner.lib.config.RobotConfig
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
-import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
+import xyz.malefic.frc.pingu.Pingu
 
 /** Class containing global values for the robot.  */
 object RobotParameters {
@@ -58,34 +58,28 @@ object RobotParameters {
         /** Class containing PID constants for the swerve drive system.  */
         object PIDParameters {
             @JvmField
-            val STEER_PID_TELE: PIDVController = PIDVController(250.0, 0.000, 20.0, 0.0)
+            val STEER_PID_TELE = Pingu(250.0, 0.000, 20.0, 0.0)
 
-            // val STEER_PID_AUTO: PIDVController = PIDVController(200.0, 0.000, 20.0, 0.0)
+            // val STEER_PID_AUTO = Pingu(200.0, 0.000, 20.0, 0.0)
             @JvmField
-            val STEER_PID_AUTO: PIDVController = PIDVController(750.0, 5.000, 15.0, 0.0)
-            // val STEER_PID_AUTO: PIDVController = PIDVController(5.0, 0.000, 0.0, 1.0)
-
-            @JvmField
-            val DRIVE_PID_AUTO: PIDVController = PIDVController(5.0, 0.0, 0.0, 0.4)
+            val STEER_PID_AUTO = Pingu(750.0, 5.000, 15.0, 0.0)
+            // val STEER_PID_AUTO = Pingu(5.0, 0.000, 0.0, 1.0)
 
             @JvmField
-            val DRIVE_PID_TELE: PIDVController =
-                PIDVController(
-                    5.0,
-                    0.0,
-                    0.0,
-                    0.4,
-                )
+            val DRIVE_PID_AUTO = Pingu(5.0, 0.0, 0.0, 0.4)
 
             @JvmField
-            val ROTATIONAL_PID: PIDController = PIDController(0.2, 0.0, 0.0)
+            val DRIVE_PID_TELE = Pingu(5.0, 0.0, 0.0, 0.4)
 
             @JvmField
-            val Y_PID: PIDController = PIDController(0.2, 0.0, 0.0)
+            val ROTATIONAL_PID: Pingu = Pingu(0.2, 0.0, 0.0)
 
             @JvmField
-            val DIST_PID: PIDController = PIDController(0.2, 0.0, 0.0)
-            val PASS_ROTATIONAL_PID: PIDController = PIDController(0.1, 0.0, 0.0)
+            val Y_PID: Pingu = Pingu(0.2, 0.0, 0.0)
+
+            @JvmField
+            val DIST_PID: Pingu = Pingu(0.2, 0.0, 0.0)
+            val PASS_ROTATIONAL_PID: Pingu = Pingu(0.1, 0.0, 0.0)
 
             var pathFollower: PPHolonomicDriveController =
                 PPHolonomicDriveController(

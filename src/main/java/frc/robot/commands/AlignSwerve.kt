@@ -14,9 +14,9 @@ class AlignSwerve : Command {
     private var yaw = 0.0
     private var y = 0.0
     private var dist = 0.0
-    private var rotationalController: PIDController? = null
-    private var yController: PIDController? = null
-    private var disController: PIDController? = null
+    private lateinit var rotationalController: PIDController
+    private lateinit var yController: PIDController
+    private lateinit var distController: PIDController
     private var offset = 0.0 // double offset is the left/right offset from the april tag to make it properly align
 
     /**
@@ -41,20 +41,19 @@ class AlignSwerve : Command {
         y = PhotonVision.y
         dist = PhotonVision.dist
 
-        rotationalController =
-            PIDController(ROTATIONAL_PID.getP(), ROTATIONAL_PID.getI(), ROTATIONAL_PID.getD())
+        rotationalController = ROTATIONAL_PID.pidController
         // with the L4 branches
         val tolerance = 0.4
-        rotationalController!!.setTolerance(tolerance)
-        rotationalController!!.setSetpoint(0.0)
+        rotationalController.setTolerance(tolerance)
+        rotationalController.setSetpoint(0.0)
 
-        yController = PIDController(Y_PID.getP(), Y_PID.getI(), Y_PID.getD())
-        yController!!.setTolerance(1.5)
-        yController!!.setSetpoint(0.0)
+        yController = Y_PID.pidController
+        yController.setTolerance(1.5)
+        yController.setSetpoint(0.0)
 
-        disController = PIDController(DIST_PID.getP(), DIST_PID.getI(), DIST_PID.getD())
-        disController!!.setTolerance(1.5)
-        disController!!.setSetpoint(0.0)
+        distController = DIST_PID.pidController
+        distController.setTolerance(1.5)
+        distController.setSetpoint(0.0)
     }
 
     /**
@@ -68,9 +67,9 @@ class AlignSwerve : Command {
 
         Swerve
             .setDriveSpeeds(
-                disController!!.calculate(dist),
-                yController!!.calculate(y) + offset,
-                rotationalController!!.calculate(yaw),
+                distController.calculate(dist),
+                yController.calculate(y) + offset,
+                rotationalController.calculate(yaw),
                 false,
             )
     }
