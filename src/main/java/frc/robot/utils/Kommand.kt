@@ -1,11 +1,9 @@
 package frc.robot.utils
 
-import com.pathplanner.lib.commands.PathPlannerAuto
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.WaitCommand
 import frc.robot.commands.PadDrive
 import frc.robot.subsystems.Swerve
-import frc.robot.utils.RobotParameters.SwerveParameters
 import frc.robot.utils.RobotParameters.SwerveParameters.Thresholds
 import frc.robot.utils.controller.GamingController
 
@@ -14,7 +12,6 @@ import frc.robot.utils.controller.GamingController
  * used in the robot's operation.
  */
 object Kommand {
-
     /**
      * Creates a [PadDrive] command to control the robot's driving mechanism.
      *

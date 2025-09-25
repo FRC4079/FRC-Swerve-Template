@@ -12,5 +12,5 @@ enum class Direction {
     RIGHT,
 
     /** Represents the center direction.  */
-    CENTER
+    CENTER,
 }

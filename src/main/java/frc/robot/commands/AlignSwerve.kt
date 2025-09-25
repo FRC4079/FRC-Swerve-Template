@@ -71,7 +71,7 @@ class AlignSwerve : Command {
                 disController!!.calculate(dist),
                 yController!!.calculate(y) + offset,
                 rotationalController!!.calculate(yaw),
-                false
+                false,
             )
     }
 
