@@ -20,12 +20,14 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import frc.robot.utils.PIDVController
 import frc.robot.utils.RobotParameters.MotorParameters
 import frc.robot.utils.RobotParameters.SwerveParameters
 import frc.robot.utils.RobotParameters.SwerveParameters.PIDParameters
 import frc.robot.utils.RobotParameters.SwerveParameters.Thresholds.SHOULD_INVERT
 import org.photonvision.EstimatedRobotPose
+import xyz.malefic.frc.pingu.LogPingu.log
+import xyz.malefic.frc.pingu.LogPingu.logs
+import xyz.malefic.frc.pingu.Pingu
 import java.util.function.BooleanSupplier
 
 object Swerve : SubsystemBase() {
@@ -35,14 +37,14 @@ object Swerve : SubsystemBase() {
     private val states = arrayOfNulls<SwerveModuleState>(4)
     private var setStates = arrayOfNulls<SwerveModuleState>(4)
     private val modules: Array<SwerveModule>
-    private val pid: PIDVController
+    private val pid: Pingu
     private var currentPose: Pose2d? = Pose2d(0.0, 0.0, Rotation2d(0.0))
     private var pathToScore: PathPlannerPath? = null
 
     var swerveLoggingThread: Thread =
         Thread {
             while (true) {
-                log<SwerveModuleState?>("Swerve Module States", *this.moduleStates)
+                logs("Swerve Module States", *this.moduleStates)
                 try {
                     Thread.sleep(100)
                 } catch (e: InterruptedException) {
@@ -56,7 +58,7 @@ object Swerve : SubsystemBase() {
     var swerveLoggingThreadBeforeSet: Thread =
         Thread {
             while (true) {
-                log<SwerveModuleState?>("Set Swerve Module States", *setStates)
+                logs("Set Swerve Module States", *setStates)
                 try {
                     Thread.sleep(100)
                 } catch (e: InterruptedException) {
@@ -133,8 +135,8 @@ object Swerve : SubsystemBase() {
      *
      * @return PIDController, A new PID object with values from the SmartDashboard.
      */
-    private fun initializePID(): PIDVController =
-        PIDVController(
+    private fun initializePID(): Pingu =
+        Pingu(
             SmartDashboard.getNumber("AUTO: P", PIDParameters.DRIVE_PID_AUTO.p),
             SmartDashboard.getNumber("AUTO: I", PIDParameters.DRIVE_PID_AUTO.i),
             SmartDashboard.getNumber("AUTO: D", PIDParameters.DRIVE_PID_AUTO.d),
@@ -213,9 +215,11 @@ object Swerve : SubsystemBase() {
 
         field.robotPose = poseEstimator.estimatedPosition
 
-        log("Pidgey Heading", this.heading)
-        log("Pidgey Rotation2D", this.pidgeyRotation!!.degrees)
-        log<Pose2d?>("Robot Pose", field.robotPose)
+        logs {
+            log("Pidgey Yaw", this.pidgeyYaw)
+            log("Pidgey Rotation2D", this.pidgeyRotation!!.degrees)
+            log("Robot Pose", field.robotPose)
+        }
     }
 
     /**
@@ -230,12 +234,12 @@ object Swerve : SubsystemBase() {
         forwardSpeed: Double,
         leftSpeed: Double,
         turnSpeed: Double,
-        isFieldOriented: Boolean,
+        isFieldOriented: Boolean = SwerveParameters.Thresholds.IS_FIELD_ORIENTED,
     ) {
         log("Forward speed", forwardSpeed)
         log("Left speed", leftSpeed)
 
-        // Converts to a measure that the robot aktualy understands
+        // Converts to a measure that the robot actually understands
         var speeds =
             if (isFieldOriented) {
                 ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -323,7 +327,7 @@ object Swerve : SubsystemBase() {
             return k.toChassisSpeeds(*this.moduleStates)
         }
 
-    val rotationPidggy: Rotation2d
+    val rotationPidgey: Rotation2d
         /**
          * Gets the rotation of the Pigeon2 IMU for PID control.
          *

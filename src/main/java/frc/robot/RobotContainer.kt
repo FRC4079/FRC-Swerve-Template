@@ -9,7 +9,6 @@ import frc.robot.commands.Kommand.resetPidgey
 import frc.robot.commands.Kommand.setTelePid
 import frc.robot.subsystems.Swerve
 import frc.robot.utils.RobotParameters.SwerveParameters.Thresholds
-import frc.robot.utils.controller.GamingController
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 import xyz.malefic.frc.emu.Button.START
 import xyz.malefic.frc.emu.Button.Y
@@ -28,9 +27,9 @@ class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands.  */
     init {
-        val pad = GamingController(0)
+        val pad = XboxController(0)
 
-        Swerve.defaultCommand = drive(pad, Thresholds.IS_FIELD_ORIENTED)
+        Swerve.defaultCommand = drive(pad)
 
         configureBindings()
 
@@ -42,7 +41,6 @@ class RobotContainer {
      * [Trigger] or our [JoystickButton] constructor with an arbitrary predicate, or via
      * the named factories in [CommandGenericHID]'s subclasses for [ ]/[CommandPS4Controller] controllers or [CommandJoystick].
      */
-    // TODO: Remap bindings
     private fun configureBindings() {
         pad.bindings {
             press(Y) { setTelePid() }
