@@ -16,7 +16,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.wpilibj.Alert
 import edu.wpi.first.wpilibj.Alert.AlertType
-import frc.robot.utils.Dash.log
 import frc.robot.utils.RobotParameters.MotorParameters
 import frc.robot.utils.RobotParameters.SwerveParameters
 import frc.robot.utils.RobotParameters.SwerveParameters.PIDParameters

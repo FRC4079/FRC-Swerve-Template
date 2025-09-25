@@ -7,11 +7,13 @@ import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.math.geometry.Transform3d
 import edu.wpi.first.math.geometry.Translation3d
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import frc.robot.utils.Dash.log
 import frc.robot.utils.RobotParameters.PhotonVisionConstants
 import org.photonvision.EstimatedRobotPose
 import org.photonvision.targeting.PhotonPipelineResult
 import org.photonvision.targeting.PhotonTrackedTarget
+import xyz.malefic.frc.pingu.LogPingu.log
+import xyz.malefic.frc.pingu.LogPingu.logs
+import xyz.malefic.frc.sub.PhotonModule
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -90,12 +92,12 @@ object PhotonVision : SubsystemBase() {
         updateBestCamera()
         if (bestCamera == null) return
 
-        val results: MutableList<PhotonPipelineResult?>? = bestCamera!!.allUnreadResults
-        currentResult = if (results!!.isEmpty()) null else results[0]
+        val results: MutableList<PhotonPipelineResult> = bestCamera!!.allUnreadResults
+        currentResult = if (results.isEmpty()) null else results[0]
 
         if (currentResult == null) return
 
-        currentTarget = currentResult!!.getBestTarget()
+        currentTarget = currentResult!!.bestTarget
         targetPoseAmbiguity = if (currentTarget != null) currentTarget!!.getPoseAmbiguity() else 7157.0
 
         for (tag in currentResult!!.getTargets()) {
@@ -105,9 +107,11 @@ object PhotonVision : SubsystemBase() {
         }
 
         // Update dashboard
-        log("yaw to target", yaw)
-        log("cam ambiguity", targetPoseAmbiguity)
-        log("_targets", currentResult!!.hasTargets())
+        logs {
+            log("yaw to target", yaw)
+            log("cam ambiguity", targetPoseAmbiguity)
+            log("_targets", currentResult!!.hasTargets())
+        }
     }
 
     /** Updates the best camera selection based on pose ambiguity of detected targets.  */
@@ -127,10 +131,10 @@ object PhotonVision : SubsystemBase() {
             var bestAmbiguity = Double.MAX_VALUE
 
             for (camera in cameras) {
-                val results: MutableList<PhotonPipelineResult?>? = camera.allUnreadResults
-                if (results.isNullOrEmpty()) continue
+                val results: MutableList<PhotonPipelineResult> = camera.allUnreadResults
+                if (results.isEmpty()) continue
                 for (result in results) {
-                    if (result?.hasTargets() == true) {
+                    if (result.hasTargets()) {
                         val target = result.bestTarget
                         if (target != null && target.getPoseAmbiguity() < bestAmbiguity) {
                             bestAmbiguity = target.getPoseAmbiguity()
@@ -184,7 +188,7 @@ object PhotonVision : SubsystemBase() {
                 .estimatedPose.best
         }
 
-    val distanceAprilTag: Double
+    val distanceToAprilTag: Double
         /**
          * Calculates the straight-line distance to the currently tracked AprilTag.
          *
@@ -194,34 +198,6 @@ object PhotonVision : SubsystemBase() {
             val pose = this.estimatedGlobalPose
             return sqrt(
                 pose.translation.x.pow(2.0) + pose.translation.y.pow(2.0),
-            )
-        }
-
-    val pivotPosition: Double
-        /**
-         * Calculates the pivot position based on the distance to the AprilTag. Uses a polynomial function
-         * tuned for optimal positioning.
-         *
-         * @return The calculated pivot position
-         */
-        get() {
-            // 10/14/2024 outside tuning
-            // Desmos: https://www.desmos.com/calculator/naalukjxze
-            val r = this.distanceAprilTag + 0.6
-            val f = -1.39223 // power 5
-            val e = 20.9711 // power 4
-            val d = -122.485 // power 3
-            val c = 342.783 // power 2
-            val b = -447.743 // power 1
-            val a = 230.409 // constant
-
-            return (
-                (f * r.pow(5.0)) +
-                    (e * r.pow(4.0)) +
-                    (d * r.pow(3.0)) +
-                    (c * r.pow(2.0)) +
-                    (b * r) +
-                    a
             )
         }
 }
