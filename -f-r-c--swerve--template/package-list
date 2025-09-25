@@ -10,14 +10,14 @@ $dokka.location:frc.robot.commands/AlignSwerve/isFinished/#/PointingToDeclaratio
 $dokka.location:frc.robot.commands/Kommand///PointingToDeclaration/-f-r-c--swerve--template/frc.robot.commands/-kommand/index.html
 $dokka.location:frc.robot.commands/Kommand/align/#frc.robot.utils.Direction/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.commands/-kommand/align.html
 $dokka.location:frc.robot.commands/Kommand/autonomousCommand/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.commands/-kommand/autonomous-command.html
-$dokka.location:frc.robot.commands/Kommand/drive/#frc.robot.utils.controller.GamingController#kotlin.Boolean/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.commands/-kommand/drive.html
+$dokka.location:frc.robot.commands/Kommand/drive/#edu.wpi.first.wpilibj.XboxController/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.commands/-kommand/drive.html
 $dokka.location:frc.robot.commands/Kommand/resetPidgey/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.commands/-kommand/reset-pidgey.html
 $dokka.location:frc.robot.commands/Kommand/setTelePid/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.commands/-kommand/set-tele-pid.html
 $dokka.location:frc.robot.commands/Kommand/waitCmd/#kotlin.Double/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.commands/-kommand/wait-cmd.html
 $dokka.location:frc.robot.commands/PadDrive.Companion///PointingToDeclaration/-f-r-c--swerve--template/frc.robot.commands/-pad-drive/-companion/index.html
-$dokka.location:frc.robot.commands/PadDrive.Companion/positionSet/#frc.robot.utils.controller.GamingController/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.commands/-pad-drive/-companion/position-set.html
+$dokka.location:frc.robot.commands/PadDrive.Companion/positionSet/#edu.wpi.first.wpilibj.XboxController/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.commands/-pad-drive/-companion/position-set.html
 $dokka.location:frc.robot.commands/PadDrive///PointingToDeclaration/-f-r-c--swerve--template/frc.robot.commands/-pad-drive/index.html
-$dokka.location:frc.robot.commands/PadDrive/PadDrive/#frc.robot.utils.controller.GamingController#kotlin.Boolean/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.commands/-pad-drive/-pad-drive.html
+$dokka.location:frc.robot.commands/PadDrive/PadDrive/#edu.wpi.first.wpilibj.XboxController/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.commands/-pad-drive/-pad-drive.html
 $dokka.location:frc.robot.commands/PadDrive/execute/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.commands/-pad-drive/execute.html
 $dokka.location:frc.robot.commands/PadDrive/isFinished/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.commands/-pad-drive/is-finished.html
 $dokka.location:frc.robot.subsystems////PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/index.html
@@ -53,7 +53,7 @@ $dokka.location:frc.robot.subsystems/Swerve/getModuleStates/#/PointingToDeclarat
 $dokka.location:frc.robot.subsystems/Swerve/getPidgeyRotation/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve/get-pidgey-rotation.html
 $dokka.location:frc.robot.subsystems/Swerve/getPidgeyYaw/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve/get-pidgey-yaw.html
 $dokka.location:frc.robot.subsystems/Swerve/getPose/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve/get-pose.html
-$dokka.location:frc.robot.subsystems/Swerve/getRotationPidggy/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve/get-rotation-pidggy.html
+$dokka.location:frc.robot.subsystems/Swerve/getRotationPidgey/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve/get-rotation-pidgey.html
 $dokka.location:frc.robot.subsystems/Swerve/getSwerveLoggingThread/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve/get-swerve-logging-thread.html
 $dokka.location:frc.robot.subsystems/Swerve/getSwerveLoggingThreadBeforeSet/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve/get-swerve-logging-thread-before-set.html
 $dokka.location:frc.robot.subsystems/Swerve/newPose/#edu.wpi.first.math.geometry.Pose2d?/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve/new-pose.html
@@ -81,41 +81,12 @@ $dokka.location:frc.robot.subsystems/SwerveModule/initializeAlarms/#kotlin.Int#k
 $dokka.location:frc.robot.subsystems/SwerveModule/initializeLoggedNetworkPID/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/initialize-logged-network-p-i-d.html
 $dokka.location:frc.robot.subsystems/SwerveModule/resetDrivePosition/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/reset-drive-position.html
 $dokka.location:frc.robot.subsystems/SwerveModule/setAutoPID/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/set-auto-p-i-d.html
-$dokka.location:frc.robot.subsystems/SwerveModule/setDrivePID/#edu.wpi.first.math.controller.PIDController#kotlin.Double/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/set-drive-p-i-d.html
+$dokka.location:frc.robot.subsystems/SwerveModule/setDrivePID/#xyz.malefic.frc.pingu.Pingu#kotlin.Double/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/set-drive-p-i-d.html
 $dokka.location:frc.robot.subsystems/SwerveModule/setState/#edu.wpi.first.math.kinematics.SwerveModuleState/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/set-state.html
-$dokka.location:frc.robot.subsystems/SwerveModule/setSteerPID/#edu.wpi.first.math.controller.PIDController#kotlin.Double/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/set-steer-p-i-d.html
+$dokka.location:frc.robot.subsystems/SwerveModule/setSteerPID/#xyz.malefic.frc.pingu.Pingu#kotlin.Double/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/set-steer-p-i-d.html
 $dokka.location:frc.robot.subsystems/SwerveModule/setTelePID/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/set-tele-p-i-d.html
 $dokka.location:frc.robot.subsystems/SwerveModule/stop/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/stop.html
 $dokka.location:frc.robot.subsystems/SwerveModule/updateTelePID/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/update-tele-p-i-d.html
-$dokka.location:frc.robot.utils.controller////PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/index.html
-$dokka.location:frc.robot.utils.controller/Axis///PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-axis/index.html
-$dokka.location:frc.robot.utils.controller/GamingController///PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/index.html
-$dokka.location:frc.robot.utils.controller/GamingController/GamingController/#kotlin.Int/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/-gaming-controller.html
-$dokka.location:frc.robot.utils.controller/GamingController/checkDPad/#kotlin.Double#kotlin.Boolean/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/check-d-pad.html
-$dokka.location:frc.robot.utils.controller/GamingController/checkDPad/#kotlin.Int/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/check-d-pad.html
-$dokka.location:frc.robot.utils.controller/GamingController/dPadIsPressed/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/d-pad-is-pressed.html
-$dokka.location:frc.robot.utils.controller/GamingController/getAButton/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/get-a-button.html
-$dokka.location:frc.robot.utils.controller/GamingController/getBButton/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/get-b-button.html
-$dokka.location:frc.robot.utils.controller/GamingController/getBackButton/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/get-back-button.html
-$dokka.location:frc.robot.utils.controller/GamingController/getDPad/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/get-d-pad.html
-$dokka.location:frc.robot.utils.controller/GamingController/getDPad/#kotlin.Boolean/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/get-d-pad.html
-$dokka.location:frc.robot.utils.controller/GamingController/getDPadDown/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/get-d-pad-down.html
-$dokka.location:frc.robot.utils.controller/GamingController/getDPadLeft/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/get-d-pad-left.html
-$dokka.location:frc.robot.utils.controller/GamingController/getDPadRight/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/get-d-pad-right.html
-$dokka.location:frc.robot.utils.controller/GamingController/getDPadUp/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/get-d-pad-up.html
-$dokka.location:frc.robot.utils.controller/GamingController/getLeftAnalogXAxis/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/get-left-analog-x-axis.html
-$dokka.location:frc.robot.utils.controller/GamingController/getLeftAnalogYAxis/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/get-left-analog-y-axis.html
-$dokka.location:frc.robot.utils.controller/GamingController/getLeftTriggerValue/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/get-left-trigger-value.html
-$dokka.location:frc.robot.utils.controller/GamingController/getRawAxis/#kotlin.Int/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/get-raw-axis.html
-$dokka.location:frc.robot.utils.controller/GamingController/getRawButton/#kotlin.Int/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/get-raw-button.html
-$dokka.location:frc.robot.utils.controller/GamingController/getRightAnalogXAxis/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/get-right-analog-x-axis.html
-$dokka.location:frc.robot.utils.controller/GamingController/getRightAnalogYAxis/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/get-right-analog-y-axis.html
-$dokka.location:frc.robot.utils.controller/GamingController/getRightTriggerValue/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/get-right-trigger-value.html
-$dokka.location:frc.robot.utils.controller/GamingController/getStartButton/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/get-start-button.html
-$dokka.location:frc.robot.utils.controller/GamingController/getXButton/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/get-x-button.html
-$dokka.location:frc.robot.utils.controller/GamingController/getYButton/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/get-y-button.html
-$dokka.location:frc.robot.utils.controller/GamingController/setRumble/#kotlin.Float/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-gaming-controller/set-rumble.html
-$dokka.location:frc.robot.utils.controller/Trigger///PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils.controller/-trigger/index.html
 $dokka.location:frc.robot.utils////PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/index.html
 $dokka.location:frc.robot.utils/Direction.CENTER///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}-f-r-c--swerve--template/frc.robot.utils/-direction/-c-e-n-t-e-r/index.html
 $dokka.location:frc.robot.utils/Direction.LEFT///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}-f-r-c--swerve--template/frc.robot.utils/-direction/-l-e-f-t/index.html
@@ -124,11 +95,6 @@ $dokka.location:frc.robot.utils/Direction///PointingToDeclaration/-f-r-c--swerv
 $dokka.location:frc.robot.utils/Direction/getEntries/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-direction/get-entries.html
 $dokka.location:frc.robot.utils/Direction/valueOf/#kotlin.String/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-direction/value-of.html
 $dokka.location:frc.robot.utils/Direction/values/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-direction/values.html
-$dokka.location:frc.robot.utils/PIDVController///PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-p-i-d-v-controller/index.html
-$dokka.location:frc.robot.utils/PIDVController/PIDVController/#edu.wpi.first.math.controller.PIDController#kotlin.Double/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-p-i-d-v-controller/-p-i-d-v-controller.html
-$dokka.location:frc.robot.utils/PIDVController/PIDVController/#kotlin.Double#kotlin.Double#kotlin.Double#kotlin.Double/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-p-i-d-v-controller/-p-i-d-v-controller.html
-$dokka.location:frc.robot.utils/PIDVController/getV/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-p-i-d-v-controller/get-v.html
-$dokka.location:frc.robot.utils/PIDVController/setV/#kotlin.Double/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-p-i-d-v-controller/set-v.html
 $dokka.location:frc.robot.utils/RobotParameters.MotorParameters///PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-robot-parameters/-motor-parameters/index.html
 $dokka.location:frc.robot.utils/RobotParameters.PhotonVisionConstants///PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-robot-parameters/-photon-vision-constants/index.html
 $dokka.location:frc.robot.utils/RobotParameters.SwerveParameters.PIDParameters///PointingToDeclaration/-f-r-c--swerve--template/frc.robot.utils/-robot-parameters/-swerve-parameters/-p-i-d-parameters/index.html
@@ -160,4 +126,3 @@ frc.robot
 frc.robot.commands
 frc.robot.subsystems
 frc.robot.utils
-frc.robot.utils.controller
