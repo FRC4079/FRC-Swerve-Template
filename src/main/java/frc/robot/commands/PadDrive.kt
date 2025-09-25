@@ -2,7 +2,6 @@ package frc.robot.commands
 
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.subsystems.Swerve
-import frc.robot.utils.Dash.log
 import frc.robot.utils.RobotParameters
 import frc.robot.utils.RobotParameters.MotorParameters.MAX_SPEED
 import frc.robot.utils.RobotParameters.SwerveParameters.Thresholds.X_DEADZONE

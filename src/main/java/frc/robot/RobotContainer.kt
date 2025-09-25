@@ -11,17 +11,8 @@ import frc.robot.subsystems.Swerve
 import frc.robot.utils.RobotParameters.SwerveParameters.Thresholds
 import frc.robot.utils.controller.GamingController
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
-import xyz.malefic.frc.emu.Button
-import xyz.malefic.frc.emu.Button.A
-import xyz.malefic.frc.emu.Button.B
-import xyz.malefic.frc.emu.Button.X
-import xyz.malefic.frc.emu.Button.Y
 import xyz.malefic.frc.emu.Button.START
-import xyz.malefic.frc.emu.Button.DPAD_UP
-import xyz.malefic.frc.emu.Button.LEFT_BUMPER
-import xyz.malefic.frc.emu.Button.LEFT_TRIGGER
-import xyz.malefic.frc.emu.Button.RIGHT_BUMPER
-import xyz.malefic.frc.emu.Button.RIGHT_STICK
+import xyz.malefic.frc.emu.Button.Y
 import xyz.malefic.frc.pingu.Bingu.bindings
 
 /**
@@ -30,26 +21,28 @@ import xyz.malefic.frc.pingu.Bingu.bindings
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
-object RobotContainer {
-
+class RobotContainer {
     val pad: XboxController = XboxController(1)
 
     var networkChooser: LoggedDashboardChooser<Command?> = LoggedDashboardChooser<Command?>("AutoChooser")
 
     /** The container for the robot. Contains subsystems, OI devices, and commands.  */
     init {
+        val pad = GamingController(0)
 
-        networkChooser.addDefaultOption("Do Nothing", PathPlannerAuto("Straight Auto"))
+        Swerve.defaultCommand = drive(pad, Thresholds.IS_FIELD_ORIENTED)
 
         configureBindings()
+
+        networkChooser.addDefaultOption("Do Nothing", PathPlannerAuto("Straight Auto"))
     }
 
     /**
      * Use this method to define your trigger->command mappings. Triggers can be created via the
-     * [frc.robot.utils.controller.Trigger] or our [JoystickButton] constructor with an arbitrary predicate, or via
-     * the named factories in [edu.wpi.first.wpilibj2.command.button.CommandGenericHID]'s subclasses for [edu.wpi.first.wpilibj2.command.button.CommandXboxController]/[edu.wpi.first.wpilibj2.command.button.CommandPS4Controller] controllers or [edu.wpi.first.wpilibj2.command.button.CommandJoystick].
+     * [Trigger] or our [JoystickButton] constructor with an arbitrary predicate, or via
+     * the named factories in [CommandGenericHID]'s subclasses for [ ]/[CommandPS4Controller] controllers or [CommandJoystick].
      */
-    private fun configureBindings() { // TODO: Remap bindings
+    private fun configureBindings() {
         pad.bindings {
             press(Y) { setTelePid() }
             press(START) { resetPidgey() }
