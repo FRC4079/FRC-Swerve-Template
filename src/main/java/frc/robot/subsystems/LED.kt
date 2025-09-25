@@ -92,7 +92,7 @@ object LED : SubsystemBase() {
 
             wave = (wave + 1) / 2
 
-            val (r, g, b) = Color.HIGH_TIDE.rgb.toList().map { it * wave.toInt() }
+            val (r, g, b) = Color.HIGH_TIDE.rgb.toList().map { (it * wave).toInt() }
 
             addressableLEDBuffer.setRGB(i, r, g, b)
         }
