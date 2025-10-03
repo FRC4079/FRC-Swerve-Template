@@ -140,7 +140,7 @@ class SwerveModule(
         driveConfigs.Slot0.kP = PIDParameters.DRIVE_PID_AUTO.p
         driveConfigs.Slot0.kI = PIDParameters.DRIVE_PID_AUTO.i
         driveConfigs.Slot0.kD = PIDParameters.DRIVE_PID_AUTO.d
-        driveConfigs.Slot0.kV = PIDParameters.DRIVE_PID_AUTO.v!!
+        driveConfigs.Slot0.kV = PIDParameters.DRIVE_PID_AUTO.v
 
         // Sets the brake mode, inverted, and current limits for the drive motor
         driveConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake
