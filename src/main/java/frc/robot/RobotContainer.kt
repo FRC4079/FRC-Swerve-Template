@@ -3,10 +3,13 @@ package frc.robot
 import com.pathplanner.lib.commands.PathPlannerAuto
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import frc.robot.commands.Kommand.drive
 import frc.robot.commands.Kommand.resetPidgey
 import frc.robot.commands.Kommand.setTelePid
+import frc.robot.subsystems.LED
+import frc.robot.subsystems.PhotonVision
 import frc.robot.subsystems.Swerve
 import frc.robot.utils.RobotParameters.SwerveParameters.Thresholds
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
@@ -27,6 +30,12 @@ class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands.  */
     init {
+        CommandScheduler.getInstance().registerSubsystem(
+            Swerve,
+            LED,
+            PhotonVision,
+        )
+
         val pad = XboxController(0)
 
         Swerve.defaultCommand = drive(pad)

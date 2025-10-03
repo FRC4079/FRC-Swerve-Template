@@ -209,7 +209,7 @@ object Swerve : SubsystemBase() {
         }
 
         /*
-     Updates the robot position based on movement and rotation from the pidgey and encoders.
+        Updates the robot position based on movement and rotation from the pidgey and encoders.
          */
         poseEstimator.update(this.pidgeyRotation, this.modulePositions)
 
