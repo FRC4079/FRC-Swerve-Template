@@ -2,7 +2,7 @@
 dokka = "2.1.0"
 spotless = "8.1.0"
 gradleRIO = "2025.3.2"
-junit = "6.0.1"
+junit = "6.0.2"
 malefix = "2.4.0"
 
 [libraries]
