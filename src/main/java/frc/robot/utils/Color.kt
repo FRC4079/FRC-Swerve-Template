@@ -3,7 +3,9 @@ package frc.robot.utils
 /**
  * The Color enum represents possible default values that can be used for LED colors.
  */
-enum class Color(val rgb: Triple<Int, Int, Int>) {
+enum class Color(
+    val rgb: Triple<Int, Int, Int>,
+) {
     /** Represents the color red.  */
     RED(Triple(255, 0, 0)),
 

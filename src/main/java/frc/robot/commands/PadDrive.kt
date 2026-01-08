@@ -7,19 +7,13 @@ import frc.robot.utils.RobotParameters.MotorParameters.MAX_ANGULAR_SPEED
 import frc.robot.utils.RobotParameters.MotorParameters.MAX_SPEED
 import frc.robot.utils.RobotParameters.SwerveParameters.Thresholds.X_DEADZONE
 import frc.robot.utils.RobotParameters.SwerveParameters.Thresholds.Y_DEADZONE
-import xyz.malefic.frc.pingu.LogPingu.log
-import xyz.malefic.frc.pingu.LogPingu.logs
+import xyz.malefic.frc.pingu.log.LogPingu.log
 import kotlin.math.abs
 
 /** Command to control the robot's swerve drive using a Logitech gaming pad.  */
 class PadDrive(
     private val pad: XboxController,
 ) : Command() {
-    /**
-     * Constructs a new PadDrive command.
-     *
-     * @param pad The Logitech gaming pad used to control the robot.
-     */
     init {
         addRequirements(Swerve)
     }
@@ -34,11 +28,9 @@ class PadDrive(
 
         val rotation = if (abs(pad.rightX) >= 0.1) -pad.rightX * MAX_ANGULAR_SPEED else 0.0
 
-        logs {
-            log("X Joystick", position.first)
-            log("Y Joystick", position.second)
-            log("Rotation", rotation)
-        }
+        "X Joystick" log position.first
+        "Y Joystick" log position.second
+        "Rotation" log rotation
 
         Swerve.setDriveSpeeds(position.second, position.first, rotation * 0.5)
     }

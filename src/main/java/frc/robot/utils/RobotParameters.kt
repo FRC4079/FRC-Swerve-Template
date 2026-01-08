@@ -6,7 +6,7 @@ import com.pathplanner.lib.config.RobotConfig
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
-import xyz.malefic.frc.pingu.Pingu
+import xyz.malefic.frc.pingu.control.Pingu
 
 /** Class containing global values for the robot.  */
 object RobotParameters {

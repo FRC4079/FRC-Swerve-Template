@@ -11,11 +11,10 @@ import frc.robot.commands.Kommand.setTelePid
 import frc.robot.subsystems.LED
 import frc.robot.subsystems.PhotonVision
 import frc.robot.subsystems.Swerve
-import frc.robot.utils.RobotParameters.SwerveParameters.Thresholds
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 import xyz.malefic.frc.emu.Button.START
 import xyz.malefic.frc.emu.Button.Y
-import xyz.malefic.frc.pingu.Bingu.bindings
+import xyz.malefic.frc.pingu.binding.Bingu.bindings
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,7 +25,7 @@ import xyz.malefic.frc.pingu.Bingu.bindings
 class RobotContainer {
     val pad: XboxController = XboxController(1)
 
-    var networkChooser: LoggedDashboardChooser<Command?> = LoggedDashboardChooser<Command?>("AutoChooser")
+    var networkChooser: LoggedDashboardChooser<Command?> = LoggedDashboardChooser("AutoChooser")
 
     /** The container for the robot. Contains subsystems, OI devices, and commands.  */
     init {

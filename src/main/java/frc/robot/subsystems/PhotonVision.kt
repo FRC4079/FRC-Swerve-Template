@@ -11,8 +11,7 @@ import frc.robot.utils.RobotParameters.PhotonVisionConstants
 import org.photonvision.EstimatedRobotPose
 import org.photonvision.targeting.PhotonPipelineResult
 import org.photonvision.targeting.PhotonTrackedTarget
-import xyz.malefic.frc.pingu.LogPingu.log
-import xyz.malefic.frc.pingu.LogPingu.logs
+import xyz.malefic.frc.pingu.log.LogPingu.log
 import xyz.malefic.frc.sub.PhotonModule
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -60,11 +59,6 @@ object PhotonVision : SubsystemBase() {
     var targetPoseAmbiguity: Double = 7157.0
         private set
 
-    /**
-     * Creates a new instance of this PhotonVision subsystem. This constructor is private since this
-     * class is a Singleton. Code should use the [.getInstance] method to get the singleton
-     * instance.
-     */
     init {
         // Initialize cameras with their positions
         val fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField)
@@ -106,12 +100,9 @@ object PhotonVision : SubsystemBase() {
             dist = tag.getBestCameraToTarget().z
         }
 
-        // Update dashboard
-        logs {
-            log("yaw to target", yaw)
-            log("cam ambiguity", targetPoseAmbiguity)
-            log("_targets", currentResult!!.hasTargets())
-        }
+        "yaw to target" log yaw
+        "cam ambiguity" log targetPoseAmbiguity
+        "_targets" log currentResult!!.hasTargets()
     }
 
     /** Updates the best camera selection based on pose ambiguity of detected targets.  */
@@ -119,13 +110,13 @@ object PhotonVision : SubsystemBase() {
         bestCamera = this.cameraWithLeastAmbiguity
     }
 
+    /**
+     * Selects the camera with the least pose ambiguity from all available cameras.
+     *
+     * @return The CameraModule with the lowest pose ambiguity, or null if no cameras have valid
+     * targets
+     */
     private val cameraWithLeastAmbiguity: PhotonModule?
-        /**
-         * Selects the camera with the least pose ambiguity from all available cameras.
-         *
-         * @return The CameraModule with the lowest pose ambiguity, or null if no cameras have valid
-         * targets
-         */
         get() {
             var bestCam: PhotonModule? = null
             var bestAmbiguity = Double.MAX_VALUE
@@ -172,12 +163,12 @@ object PhotonVision : SubsystemBase() {
         return if (currentResult != null) estimator.update(currentResult).orElse(null) else null
     }
 
+    /**
+     * Gets the estimated global pose of the robot as a [Transform3d].
+     *
+     * @return The estimated global pose as a [Transform3d]
+     */
     val estimatedGlobalPose: Transform3d
-        /**
-         * Gets the estimated global pose of the robot as a [Transform3d].
-         *
-         * @return The estimated global pose as a [Transform3d]
-         */
         get() {
             if (currentResult == null || currentResult!!.multiTagResult.isEmpty) {
                 return Transform3d(0.0, 0.0, 0.0, Rotation3d())
@@ -188,12 +179,12 @@ object PhotonVision : SubsystemBase() {
                 .estimatedPose.best
         }
 
+    /**
+     * Calculates the straight-line distance to the currently tracked AprilTag.
+     *
+     * @return The distance to the AprilTag in meters
+     */
     val distanceToAprilTag: Double
-        /**
-         * Calculates the straight-line distance to the currently tracked AprilTag.
-         *
-         * @return The distance to the AprilTag in meters
-         */
         get() {
             val pose = this.estimatedGlobalPose
             return sqrt(

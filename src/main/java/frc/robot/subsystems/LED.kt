@@ -11,10 +11,6 @@ object LED : SubsystemBase() {
     private val alignmentIndication1 = AddressableLED(9)
     private val addressableLEDBuffer = AddressableLEDBuffer(120)
 
-    /**
-     * Creates a new instance of this LEDSubsystem. This constructor is private since this class is a
-     * Singleton. Code should use the [.getInstance] method to get the singleton instance.
-     */
     init {
         alignmentIndication1.setLength(addressableLEDBuffer.length)
         alignmentIndication1.setData(addressableLEDBuffer)
@@ -92,7 +88,10 @@ object LED : SubsystemBase() {
 
             wave = (wave + 1) / 2
 
-            val (r, g, b) = Color.HIGH_TIDE.rgb.toList().map { (it * wave).toInt() }
+            val (r, g, b) =
+                Color.HIGH_TIDE.rgb
+                    .toList()
+                    .map { (it * wave).toInt() }
 
             addressableLEDBuffer.setRGB(i, r, g, b)
         }
