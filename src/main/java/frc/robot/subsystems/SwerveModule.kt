@@ -19,9 +19,8 @@ import frc.robot.utils.RobotParameters.MotorParameters
 import frc.robot.utils.RobotParameters.SwerveParameters
 import frc.robot.utils.RobotParameters.SwerveParameters.PIDParameters
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
-import xyz.malefic.frc.pingu.LogPingu.log
-import xyz.malefic.frc.pingu.LogPingu.logs
-import xyz.malefic.frc.pingu.Pingu
+import xyz.malefic.frc.pingu.control.Pingu
+import xyz.malefic.frc.pingu.log.LogPingu.log
 
 /** Represents a swerve module used in a swerve drive system.  */
 class SwerveModule(
@@ -113,27 +112,16 @@ class SwerveModule(
                 )
             driveMotor.setControl(velocitySetter.withVelocity(velocityToSet))
 
-            // Log the actual and set values for debugging
-            logs {
-                log("drive actual speed " + canCoder.deviceID, driveMotor.velocity.valueAsDouble)
-                log("drive set speed " + canCoder.deviceID, velocityToSet)
-                log("steer actual angle " + canCoder.deviceID, canCoder.absolutePosition.valueAsDouble)
-                log("steer set angle " + canCoder.deviceID, angleToSet)
-                log("desired state after optimize " + canCoder.deviceID, value.angle.rotations)
-            }
+            "drive actual speed " + canCoder.deviceID log driveMotor.velocity.valueAsDouble
+            "drive set speed " + canCoder.deviceID log velocityToSet
+            "steer actual angle " + canCoder.deviceID log canCoder.absolutePosition.valueAsDouble
+            "steer set angle " + canCoder.deviceID log angleToSet
+            "desired state after optimize " + canCoder.deviceID log value.angle.rotations
 
             // Update the state with the optimized values
             field = value
         }
 
-    /**
-     * Constructs a new SwerveModule.
-     *
-     * @param driveId The ID of the drive motor.
-     * @param steerId The ID of the steer motor.
-     * @param canCoderID The ID of the CANcoder.
-     * @param canCoderDriveStraightSteerSetPoint The set point for the CANcoder drive straight steer.
-     */
     init {
 
         // Set the PID values for the drive motor
@@ -177,7 +165,6 @@ class SwerveModule(
         // sure the magnet offset is ACCURATE and based on when the wheel is straight!
 
         // canCoderConfiguration.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
-        // TODO: Change default value
         canCoderConfiguration.MagnetSensor.SensorDirection =
             SensorDirectionValue.CounterClockwise_Positive
         canCoderConfiguration.MagnetSensor.MagnetOffset =
@@ -254,13 +241,13 @@ class SwerveModule(
 
     /** Sets the PID values for teleoperation mode.  */
     fun setTelePID() {
-        setDrivePID(PIDParameters.DRIVE_PID_TELE, PIDParameters.DRIVE_PID_TELE.v!!)
-        setSteerPID(PIDParameters.STEER_PID_TELE, PIDParameters.STEER_PID_TELE.v!!)
+        setDrivePID(PIDParameters.DRIVE_PID_TELE, PIDParameters.DRIVE_PID_TELE.v)
+        setSteerPID(PIDParameters.STEER_PID_TELE, PIDParameters.STEER_PID_TELE.v)
     }
 
     /** Sets the PID values for autonomous mode.  */
     fun setAutoPID() {
-        setDrivePID(PIDParameters.DRIVE_PID_AUTO, PIDParameters.DRIVE_PID_AUTO.v!!)
+        setDrivePID(PIDParameters.DRIVE_PID_AUTO, PIDParameters.DRIVE_PID_AUTO.v)
     }
 
     /** Resets the drive motor position to zero.  */

@@ -25,9 +25,8 @@ import frc.robot.utils.RobotParameters.SwerveParameters
 import frc.robot.utils.RobotParameters.SwerveParameters.PIDParameters
 import frc.robot.utils.RobotParameters.SwerveParameters.Thresholds.SHOULD_INVERT
 import org.photonvision.EstimatedRobotPose
-import xyz.malefic.frc.pingu.LogPingu.log
-import xyz.malefic.frc.pingu.LogPingu.logs
-import xyz.malefic.frc.pingu.Pingu
+import xyz.malefic.frc.pingu.control.Pingu
+import xyz.malefic.frc.pingu.log.LogPingu.log
 import java.util.function.BooleanSupplier
 
 object Swerve : SubsystemBase() {
@@ -44,7 +43,7 @@ object Swerve : SubsystemBase() {
     var swerveLoggingThread: Thread =
         Thread {
             while (true) {
-                logs("Swerve Module States", *this.moduleStates)
+                "Swerve Module States" log this.moduleStates
                 try {
                     Thread.sleep(100)
                 } catch (e: InterruptedException) {
@@ -58,7 +57,7 @@ object Swerve : SubsystemBase() {
     var swerveLoggingThreadBeforeSet: Thread =
         Thread {
             while (true) {
-                logs("Set Swerve Module States", *setStates)
+                "Set Swerve Module States" log setStates
                 try {
                     Thread.sleep(100)
                 } catch (e: InterruptedException) {
@@ -76,10 +75,6 @@ object Swerve : SubsystemBase() {
     var constraints: PathConstraints =
         PathConstraints(2.0, 3.0, Units.degreesToRadians(540.0), Units.degreesToRadians(720.0))
 
-    /**
-     * Creates a new instance of this SwerveSubsystem. This constructor is private since this class is
-     * a Singleton. Code should use the [.getInstance] method to get the singleton instance.
-     */
     init {
         this.modules = initializeModules()
         this.pid = initializePID()
@@ -215,11 +210,9 @@ object Swerve : SubsystemBase() {
 
         field.robotPose = poseEstimator.estimatedPosition
 
-        logs {
-            log("Pidgey Yaw", this.pidgeyYaw)
-            log("Pidgey Rotation2D", this.pidgeyRotation!!.degrees)
-            log("Robot Pose", field.robotPose)
-        }
+        "Pidgey Yaw" log this.pidgeyYaw
+        "Pidgey Rotation2D" log this.pidgeyRotation.degrees
+        "Robot Pose" log field.robotPose
     }
 
     /**
@@ -236,8 +229,8 @@ object Swerve : SubsystemBase() {
         turnSpeed: Double,
         isFieldOriented: Boolean = SwerveParameters.Thresholds.IS_FIELD_ORIENTED,
     ) {
-        log("Forward speed", forwardSpeed)
-        log("Left speed", leftSpeed)
+        "Forward speed" log forwardSpeed
+        "Left speed" log leftSpeed
 
         // Converts to a measure that the robot actually understands
         var speeds =
@@ -261,28 +254,22 @@ object Swerve : SubsystemBase() {
         this.moduleStates = newStates
     }
 
-    val pidgeyRotation: Rotation2d?
-        /**
-         * Gets the rotation of the Pigeon2 IMU.
-         *
-         * @return Rotation2D, The rotation of the Pigeon2 IMU.
-         */
+    /**
+     * Rotation of the Pigeon2 IMU
+     */
+    val pidgeyRotation: Rotation2d
         get() = pidgey.rotation2d
 
+    /**
+     * Heading of the robot
+     */
     val heading: Double
-        /**
-         * Gets the heading of the robot.
-         *
-         * @return double, The heading of the robot.
-         */
         get() = -pidgey.yaw.valueAsDouble
 
+    /**
+     * Yaw of the Pigeon2 IMU
+     */
     val pidgeyYaw: Double
-        /**
-         * Gets the yaw of the Pigeon2 IMU.
-         *
-         * @return double, The yaw of the Pigeon2 IMU.
-         */
         get() = pidgey.yaw.valueAsDouble
 
     /** Resets the Pigeon2 IMU.  */
@@ -290,12 +277,10 @@ object Swerve : SubsystemBase() {
         pidgey.reset()
     }
 
-    val pose: Pose2d?
-        /**
-         * Gets the current pose of the robot from the pose estimator.
-         *
-         * @return The current pose of the robot.
-         */
+    /**
+     * The current pose of the robot from the pose estimator
+     */
+    val pose: Pose2d
         get() = poseEstimator.estimatedPosition
 
     /** Resets the pose of the robot to zero.  */
@@ -316,23 +301,19 @@ object Swerve : SubsystemBase() {
         poseEstimator.resetPosition(this.pidgeyRotation, this.modulePositions, pose)
     }
 
-    val autoSpeeds: ChassisSpeeds?
-        /**
-         * Gets the chassis speeds for autonomous driving.
-         *
-         * @return ChassisSpeeds, The chassis speeds for autonomous driving.
-         */
+    /**
+     * The chassis speeds, used for autonomous driving
+     */
+    val autoSpeeds: ChassisSpeeds
         get() {
             val k = SwerveParameters.PhysicalParameters.kinematics
             return k.toChassisSpeeds(*this.moduleStates)
         }
 
+    /**
+     * The rotation of the Pigeon2 IMU, used for PID control
+     */
     val rotationPidgey: Rotation2d
-        /**
-         * Gets the rotation of the Pigeon2 IMU for PID control.
-         *
-         * @return Rotation2D, The rotation of the Pigeon2 IMU for PID control.
-         */
         get() = Rotation2d.fromDegrees(-pidgey.rotation2d.degrees)
 
     /**
@@ -346,12 +327,10 @@ object Swerve : SubsystemBase() {
         this.moduleStates = newStates
     }
 
+    /**
+     * The states of the swerve modules
+     */
     var moduleStates: Array<SwerveModuleState>
-        /**
-         * Gets the states of the swerve modules.
-         *
-         * @return SwerveModuleState[], The states of the swerve modules.
-         */
         get() {
             val moduleStates = emptyArray<SwerveModuleState>()
             for (i in modules.indices) {
@@ -360,23 +339,16 @@ object Swerve : SubsystemBase() {
             return moduleStates
         }
 
-        /**
-         * Sets the states of the swerve modules.
-         *
-         * @param states The states of the swerve modules.
-         */
         set(states) {
             for (i in states.indices) {
                 modules[i].state = states[i]
             }
         }
 
+    /**
+     * The positions of the swerve modules
+     */
     val modulePositions: Array<SwerveModulePosition?>
-        /**
-         * Gets the positions of the swerve modules.
-         *
-         * @return SwerveModulePosition[], The positions of the swerve modules.
-         */
         get() {
             val positions = arrayOfNulls<SwerveModulePosition>(states.size)
             for (i in positions.indices) {

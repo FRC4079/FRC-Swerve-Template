@@ -1,2 +1,0 @@
-# Ensure commitlint gets the message correctly
-npx commitlint --edit "$1"

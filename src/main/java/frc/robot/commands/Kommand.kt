@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand
 import frc.robot.subsystems.Swerve
 import frc.robot.utils.Direction
 import frc.robot.utils.RobotParameters.SwerveParameters
-import frc.robot.utils.RobotParameters.SwerveParameters.Thresholds
 
 /**
  * The [Kommand] object provides factory methods to create various commands
@@ -29,7 +28,6 @@ object Kommand {
      * Creates a [PadDrive] command to control the robot's driving mechanism.
      *
      * @param controller The gaming controller used to drive the robot.
-     * @param isFieldOriented Whether the driving should be field-oriented.
      * @return A [PadDrive] command to control the robot's driving mechanism.
      */
     @JvmStatic
