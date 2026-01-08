@@ -76,9 +76,9 @@ $dokka.location:frc.robot.subsystems/SwerveModule/initializeAlarms/#kotlin.Int#k
 $dokka.location:frc.robot.subsystems/SwerveModule/initializeLoggedNetworkPID/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/initialize-logged-network-p-i-d.html
 $dokka.location:frc.robot.subsystems/SwerveModule/resetDrivePosition/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/reset-drive-position.html
 $dokka.location:frc.robot.subsystems/SwerveModule/setAutoPID/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/set-auto-p-i-d.html
-$dokka.location:frc.robot.subsystems/SwerveModule/setDrivePID/#<ERROR CLASS> ERROR CLASS: Symbol not found for Pingu#kotlin.Double/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/set-drive-p-i-d.html
+$dokka.location:frc.robot.subsystems/SwerveModule/setDrivePID/#xyz.malefic.frc.pingu.control.Pingu#kotlin.Double/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/set-drive-p-i-d.html
 $dokka.location:frc.robot.subsystems/SwerveModule/setState/#edu.wpi.first.math.kinematics.SwerveModuleState/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/set-state.html
-$dokka.location:frc.robot.subsystems/SwerveModule/setSteerPID/#<ERROR CLASS> ERROR CLASS: Symbol not found for Pingu#kotlin.Double/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/set-steer-p-i-d.html
+$dokka.location:frc.robot.subsystems/SwerveModule/setSteerPID/#xyz.malefic.frc.pingu.control.Pingu#kotlin.Double/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/set-steer-p-i-d.html
 $dokka.location:frc.robot.subsystems/SwerveModule/setTelePID/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/set-tele-p-i-d.html
 $dokka.location:frc.robot.subsystems/SwerveModule/stop/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/stop.html
 $dokka.location:frc.robot.subsystems/SwerveModule/updateTelePID/#/PointingToDeclaration/-f-r-c--swerve--template/frc.robot.subsystems/-swerve-module/update-tele-p-i-d.html
