@@ -12,9 +12,13 @@ import frc.robot.subsystems.LED
 import frc.robot.subsystems.PhotonVision
 import frc.robot.subsystems.Swerve
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
+import xyz.malefic.frc.emu.Button
 import xyz.malefic.frc.emu.Button.START
 import xyz.malefic.frc.emu.Button.Y
 import xyz.malefic.frc.pingu.binding.Bingu.bindings
+import frc.robot.utils.RobotParameters.ShooterParameters.shooterState
+import frc.robot.subsystems.Shooter
+import frc.robot.utils.emu.ShooterState
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -33,6 +37,7 @@ class RobotContainer {
             Swerve,
             LED,
             PhotonVision,
+            Shooter,
         )
 
         val pad = XboxController(0)
@@ -53,6 +58,8 @@ class RobotContainer {
         pad.bindings {
             press(Y) { setTelePid() }
             press(START) { resetPidgey() }
+            press(Button.LEFT_TRIGGER) { shooterState = ShooterState.FULL_SPEED }
+            release(Button.LEFT_TRIGGER) { shooterState = ShooterState.OFF }
         }
     }
 
