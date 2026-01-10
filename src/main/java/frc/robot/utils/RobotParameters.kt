@@ -1,9 +1,6 @@
 package frc.robot.utils
 
 import com.ctre.phoenix6.signals.InvertedValue
-import com.pathplanner.lib.config.PIDConstants
-import com.pathplanner.lib.config.RobotConfig
-import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import xyz.malefic.frc.pingu.control.Pingu
@@ -81,22 +78,22 @@ object RobotParameters {
             val DIST_PID: Pingu = Pingu(0.2, 0.0, 0.0)
             val PASS_ROTATIONAL_PID: Pingu = Pingu(0.1, 0.0, 0.0)
 
-            var pathFollower: PPHolonomicDriveController =
-                PPHolonomicDriveController(
-                    PIDConstants(5.0, 0.00, 0.0), // translation
-                    PIDConstants(5.0, 0.0, 0.0), // rotation
-                )
-
-            @JvmField
-            var config: RobotConfig? = null
-
-            init {
-                try {
-                    config = RobotConfig.fromGUISettings()
-                } catch (e: Exception) {
-                    throw RuntimeException("Failed to load robot config", e)
-                }
-            }
+//            var pathFollower: PPHolonomicDriveController =
+//                PPHolonomicDriveController(
+//                    PIDConstants(5.0, 0.00, 0.0), // translation
+//                    PIDConstants(5.0, 0.0, 0.0), // rotation
+//                )
+//
+//            @JvmField
+//            var config: RobotConfig? = null
+//
+//            init {
+//                try {
+//                    config = RobotConfig.fromGUISettings()
+//                } catch (e: Exception) {
+//                    throw RuntimeException("Failed to load robot config", e)
+//                }
+//            }
         }
 
         /** Class containing physical dimensions and kinematics for the swerve drive system.  */

@@ -1,15 +1,12 @@
 package frc.robot
 
-import com.pathplanner.lib.commands.PathPlannerAuto
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
-import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import frc.robot.commands.Kommand.drive
 import frc.robot.commands.Kommand.resetPidgey
 import frc.robot.commands.Kommand.setTelePid
 import frc.robot.subsystems.LED
-import frc.robot.subsystems.PhotonVision
 import frc.robot.subsystems.Swerve
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 import xyz.malefic.frc.emu.Button.START
@@ -24,15 +21,13 @@ import xyz.malefic.frc.pingu.binding.Bingu.bindings
  */
 class RobotContainer {
     val pad: XboxController = XboxController(1)
-
     var networkChooser: LoggedDashboardChooser<Command?> = LoggedDashboardChooser("AutoChooser")
 
-    /** The container for the robot. Contains subsystems, OI devices, and commands.  */
     init {
         CommandScheduler.getInstance().registerSubsystem(
             Swerve,
             LED,
-            PhotonVision,
+//            PhotonVision,
         )
 
         val pad = XboxController(0)
@@ -41,18 +36,16 @@ class RobotContainer {
 
         configureBindings()
 
-        networkChooser.addDefaultOption("Do Nothing", PathPlannerAuto("Straight Auto"))
+//        networkChooser.addDefaultOption("Do Nothing", PathPlannerAuto("Straight Auto"))
     }
 
     /**
-     * Use this method to define your trigger->command mappings. Triggers can be created via the
-     * [Trigger] or our [JoystickButton] constructor with an arbitrary predicate, or via
-     * the named factories in [CommandGenericHID]'s subclasses for [ ]/[CommandPS4Controller] controllers or [CommandJoystick].
+     * This method defines bindings, i.e., which buttons trigger which commands.
      */
     private fun configureBindings() {
         pad.bindings {
-            press(Y) { setTelePid() }
-            press(START) { resetPidgey() }
+            press(Y) { CommandScheduler.getInstance().schedule(setTelePid()) }
+            press(START) { CommandScheduler.getInstance().schedule(resetPidgey()) }
         }
     }
 

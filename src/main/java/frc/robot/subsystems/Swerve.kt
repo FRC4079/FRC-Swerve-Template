@@ -1,11 +1,6 @@
 package frc.robot.subsystems
 
 import com.ctre.phoenix6.hardware.Pigeon2
-import com.pathplanner.lib.auto.AutoBuilder
-import com.pathplanner.lib.config.PIDConstants
-import com.pathplanner.lib.controllers.PPHolonomicDriveController
-import com.pathplanner.lib.path.PathConstraints
-import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
@@ -13,9 +8,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.kinematics.SwerveModulePosition
 import edu.wpi.first.math.kinematics.SwerveModuleState
-import edu.wpi.first.math.util.Units
-import edu.wpi.first.wpilibj.DriverStation
-import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
@@ -23,11 +15,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.utils.RobotParameters.MotorParameters
 import frc.robot.utils.RobotParameters.SwerveParameters
 import frc.robot.utils.RobotParameters.SwerveParameters.PIDParameters
-import frc.robot.utils.RobotParameters.SwerveParameters.Thresholds.SHOULD_INVERT
-import org.photonvision.EstimatedRobotPose
 import xyz.malefic.frc.pingu.control.Pingu
 import xyz.malefic.frc.pingu.log.LogPingu.log
-import java.util.function.BooleanSupplier
 
 object Swerve : SubsystemBase() {
     private val poseEstimator: SwerveDrivePoseEstimator
@@ -38,7 +27,7 @@ object Swerve : SubsystemBase() {
     private val modules: Array<SwerveModule>
     private val pid: Pingu
     private var currentPose: Pose2d? = Pose2d(0.0, 0.0, Rotation2d(0.0))
-    private var pathToScore: PathPlannerPath? = null
+//    private var pathToScore: PathPlannerPath? = null
 
     var swerveLoggingThread: Thread =
         Thread {
@@ -72,8 +61,8 @@ object Swerve : SubsystemBase() {
     // The plan is for it to path towards it then we use a set path to align itself with the goal and
     // be more accurate
     // Use this https://pathplanner.dev/pplib-pathfinding.html#pathfind-then-follow-path
-    var constraints: PathConstraints =
-        PathConstraints(2.0, 3.0, Units.degreesToRadians(540.0), Units.degreesToRadians(720.0))
+//    var constraints: PathConstraints =
+//        PathConstraints(2.0, 3.0, Units.degreesToRadians(540.0), Units.degreesToRadians(720.0))
 
     init {
         this.modules = initializeModules()
@@ -84,11 +73,11 @@ object Swerve : SubsystemBase() {
         swerveLoggingThread.start()
         swerveLoggingThreadBeforeSet.start()
 
-        try {
-            pathToScore = PathPlannerPath.fromPathFile("Straight Path")
-        } catch (e: Exception) {
-            throw RuntimeException("Failed to load robot config", e)
-        }
+//        try {
+//            pathToScore = PathPlannerPath.fromPathFile("Straight Path")
+//        } catch (e: Exception) {
+//            throw RuntimeException("Failed to load robot config", e)
+//        }
     }
 
     /**
@@ -157,30 +146,30 @@ object Swerve : SubsystemBase() {
      * Allows PathPlanner to get pose and output robot-relative chassis speeds Needs tuning
      */
     private fun configureAutoBuilder() {
-        checkNotNull(PIDParameters.config)
-        AutoBuilder.configure(
-            { this.pose },
-            { pose: Pose2d? -> this.newPose(pose) },
-            { this.autoSpeeds },
-            { chassisSpeeds: ChassisSpeeds? -> this.chassisSpeedsDrive(chassisSpeeds) },
-            PPHolonomicDriveController(
-                PIDConstants(5.0, 0.0, 0.0),
-                PIDConstants(5.0, 0.0, 0.0),
-            ),
-            PIDParameters.config,
-            BooleanSupplier {
-                val alliance = DriverStation.getAlliance()
-                if (alliance.isEmpty) {
-                    return@BooleanSupplier false
-                }
-                return@BooleanSupplier if (SHOULD_INVERT) {
-                    alliance.get() == Alliance.Red
-                } else {
-                    alliance.get() != Alliance.Blue
-                }
-            },
-            this,
-        )
+//        checkNotNull(PIDParameters.config)
+//        AutoBuilder.configure(
+//            { this.pose },
+//            { pose: Pose2d? -> this.newPose(pose) },
+//            { this.autoSpeeds },
+//            { chassisSpeeds: ChassisSpeeds? -> this.chassisSpeedsDrive(chassisSpeeds) },
+//            PPHolonomicDriveController(
+//                PIDConstants(5.0, 0.0, 0.0),
+//                PIDConstants(5.0, 0.0, 0.0),
+//            ),
+//            PIDParameters.config,
+//            BooleanSupplier {
+//                val alliance = DriverStation.getAlliance()
+//                if (alliance.isEmpty) {
+//                    return@BooleanSupplier false
+//                }
+//                return@BooleanSupplier if (SHOULD_INVERT) {
+//                    alliance.get() == Alliance.Red
+//                } else {
+//                    alliance.get() != Alliance.Blue
+//                }
+//            },
+//            this,
+//        )
     }
 
     /**
@@ -192,16 +181,16 @@ object Swerve : SubsystemBase() {
              This method checks whether the bot is in Teleop, and adds it to poseEstimator based on VISION
          */
 
-        if (DriverStation.isTeleop()) {
-            val estimatedPose: EstimatedRobotPose? =
-                PhotonVision.getEstimatedGlobalPose(poseEstimator.estimatedPosition)
-            if (estimatedPose != null) {
-                val timestamp = estimatedPose.timestampSeconds
-                val visionMeasurement2d = estimatedPose.estimatedPose.toPose2d()
-                poseEstimator.addVisionMeasurement(visionMeasurement2d, timestamp)
-                currentPose = poseEstimator.estimatedPosition
-            }
-        }
+//        if (DriverStation.isTeleop()) {
+//            val estimatedPose: EstimatedRobotPose? =
+//                PhotonVision.getEstimatedGlobalPose(poseEstimator.estimatedPosition)
+//            if (estimatedPose != null) {
+//                val timestamp = estimatedPose.timestampSeconds
+//                val visionMeasurement2d = estimatedPose.estimatedPose.toPose2d()
+//                poseEstimator.addVisionMeasurement(visionMeasurement2d, timestamp)
+//                currentPose = poseEstimator.estimatedPosition
+//            }
+//        }
 
         /*
         Updates the robot position based on movement and rotation from the pidgey and encoders.
@@ -392,7 +381,7 @@ object Swerve : SubsystemBase() {
         }
     }
 
-    fun pathFindToGoal(): Command? = AutoBuilder.pathfindThenFollowPath(pathToScore, constraints)
+//    fun pathFindToGoal(): Command? = AutoBuilder.pathfindThenFollowPath(pathToScore, constraints)
 
-    fun pathFindTest(): Command? = AutoBuilder.pathfindThenFollowPath(pathToScore, constraints)
+//    fun pathFindTest(): Command? = AutoBuilder.pathfindThenFollowPath(pathToScore, constraints)
 }

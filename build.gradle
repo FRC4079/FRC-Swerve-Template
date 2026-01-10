@@ -73,23 +73,49 @@ def includeDesktopSupport = false
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Also defines JUnit 5.
 dependencies {
-    annotationProcessor wpi.java.deps.wpilibAnnotations()
-    implementation wpi.java.deps.wpilib()
-    implementation wpi.java.vendor.java()
+    wpi.java.deps.wpilibAnnotations().forEach {
+        annotationProcessor it
+    }
+    wpi.java.deps.wpilib().forEach {
+        implementation it
+    }
+    wpi.java.vendor.java().forEach {
+        implementation it
+    }
 
-    roborioDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.roborio)
-    roborioDebug wpi.java.vendor.jniDebug(wpi.platforms.roborio)
+    wpi.java.deps.wpilibJniDebug(wpi.platforms.roborio).forEach {
+        roborioDebug it
+    }
+    wpi.java.vendor.jniDebug(wpi.platforms.roborio).forEach {
+        roborioDebug it
+    }
 
-    roborioRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.roborio)
-    roborioRelease wpi.java.vendor.jniRelease(wpi.platforms.roborio)
+    wpi.java.deps.wpilibJniRelease(wpi.platforms.roborio).forEach {
+        roborioRelease it
+    }
+    wpi.java.vendor.jniRelease(wpi.platforms.roborio).forEach {
+        roborioRelease it
+    }
 
-    nativeDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.desktop)
-    nativeDebug wpi.java.vendor.jniDebug(wpi.platforms.desktop)
-    simulationDebug wpi.sim.enableDebug()
+    wpi.java.deps.wpilibJniDebug(wpi.platforms.desktop).forEach {
+        nativeDebug it
+    }
+    wpi.java.vendor.jniDebug(wpi.platforms.desktop).forEach {
+        nativeDebug it
+    }
+    wpi.sim.enableDebug().forEach {
+        simulationDebug it
+    }
 
-    nativeRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.desktop)
-    nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
-    simulationRelease wpi.sim.enableRelease()
+    wpi.java.deps.wpilibJniRelease(wpi.platforms.desktop).forEach {
+        nativeRelease it
+    }
+    wpi.java.vendor.jniRelease(wpi.platforms.desktop).forEach {
+        nativeRelease it
+    }
+    wpi.sim.enableRelease().forEach {
+        simulationRelease it
+    }
 
     testImplementation libs.junit.jupiter
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -148,9 +174,7 @@ spotless {
     }
 }
 
-tasks.named('build') {
-    dependsOn 'spotlessApply'
-}
+project.compileJava.dependsOn(spotlessApply)
 
 dokka {
     dokkaPublications.html {
