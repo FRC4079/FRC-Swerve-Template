@@ -6,6 +6,7 @@ import com.pathplanner.lib.config.RobotConfig
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
+import frc.robot.utils.emu.IntakeState
 import xyz.malefic.frc.pingu.control.Pingu
 
 /** Class containing global values for the robot.  */
@@ -32,6 +33,7 @@ object RobotParameters {
         const val END_EFFECTOR_MOTOR_ID: Int = 17
         const val CORAL_MANIPULATOR_MOTOR_UP_ID: Int = 18
         const val CORAL_MANIPULATOR_MOTOR_DOWN_ID: Int = 19
+        const val INTAKE_MOTOR_ID : Int = 23
 
         // Motor Property Values
         const val MAX_SPEED: Double = 5.76
@@ -140,6 +142,11 @@ object RobotParameters {
             // Testing boolean for logging (to not slow down the robot)
             const val TEST_MODE: Boolean = true
         }
+    }
+
+    object IntakeParameters {
+        val INTAKE_MOTOR_PINGU = Pingu(0.5, 0.0, 0.0, 1.0)
+        var intakeState: IntakeState = IntakeState.STOP
     }
 
     /** Class containing constants for the Photonvision subsystem.  */

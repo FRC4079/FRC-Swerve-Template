@@ -11,9 +11,13 @@ import frc.robot.commands.Kommand.setTelePid
 import frc.robot.subsystems.LED
 import frc.robot.subsystems.PhotonVision
 import frc.robot.subsystems.Swerve
+import frc.robot.subsystems.Intake
+import frc.robot.utils.RobotParameters.IntakeParameters.intakeState
+import frc.robot.utils.emu.IntakeState
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 import xyz.malefic.frc.emu.Button.START
 import xyz.malefic.frc.emu.Button.Y
+import xyz.malefic.frc.emu.Button.RIGHT_TRIGGER
 import xyz.malefic.frc.pingu.binding.Bingu.bindings
 
 /**
@@ -33,6 +37,7 @@ class RobotContainer {
             Swerve,
             LED,
             PhotonVision,
+            Intake
         )
 
         val pad = XboxController(0)
@@ -53,6 +58,8 @@ class RobotContainer {
         pad.bindings {
             press(Y) { setTelePid() }
             press(START) { resetPidgey() }
+            press(RIGHT_TRIGGER) { intakeState = IntakeState.INTAKE }
+            release(RIGHT_TRIGGER) { intakeState = IntakeState.STOP }
         }
     }
 
