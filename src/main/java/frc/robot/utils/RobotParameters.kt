@@ -6,6 +6,7 @@ import com.pathplanner.lib.config.RobotConfig
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
+import frc.robot.utils.emu.HoodState
 import xyz.malefic.frc.pingu.control.Pingu
 import frc.robot.utils.emu.ShooterState
 
@@ -35,6 +36,7 @@ object RobotParameters {
         const val CORAL_MANIPULATOR_MOTOR_DOWN_ID: Int = 19
         const val SHOOTER_CLOCKWISE_MOTOR_ID: Int = 20
         const val SHOOTER_COUNTER_MOTOR_ID: Int = 21
+        const val SHOOTER_HOOD_MOTOR_ID: Int = 22
 
         // Motor Property Values
         const val MAX_SPEED: Double = 5.76
@@ -57,8 +59,10 @@ object RobotParameters {
 
         val COUNTER_PINGU  = Pingu(0.1, 0.0, 0.0, 0.0)
         val CLOCKWISE_PINGU = Pingu(0.1, 0.0, 0.0, 0.0)
+        val HOOD_PINGU = Pingu(0.1, 0.0, 0.0, 0.0)
 
         var shooterState: ShooterState = ShooterState.OFF
+        var hoodState: HoodState = HoodState.HOOD_NEUTRAL
     }
 
     /** Class containing global values related to the swerve drive system.  */
