@@ -16,18 +16,29 @@ import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.math.util.Units
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.DriverStation.Alliance
+import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.utils.RobotParameters.MotorParameters
+import frc.robot.utils.RobotParameters.MotorParameters.MAX_ANGULAR_SPEED
+import frc.robot.utils.RobotParameters.MotorParameters.MAX_SPEED
 import frc.robot.utils.RobotParameters.SwerveParameters
 import frc.robot.utils.RobotParameters.SwerveParameters.PIDParameters
+import frc.robot.utils.RobotParameters.SwerveParameters.swerveState
 import frc.robot.utils.RobotParameters.SwerveParameters.Thresholds.SHOULD_INVERT
+import frc.robot.utils.RobotParameters.SwerveParameters.Thresholds.X_DEADZONE
+import frc.robot.utils.RobotParameters.SwerveParameters.Thresholds.Y_DEADZONE
+import frc.robot.utils.RobotParameters.SwerveParameters.slowmode
+import frc.robot.utils.RobotParameters.GameParameters.teamColor
 import org.photonvision.EstimatedRobotPose
 import xyz.malefic.frc.pingu.control.Pingu
 import xyz.malefic.frc.pingu.log.LogPingu.log
 import java.util.function.BooleanSupplier
+import frc.robot.utils.emu.SwerveDriveState
+import kotlin.math.abs
+
 
 object Swerve : SubsystemBase() {
     private val poseEstimator: SwerveDrivePoseEstimator
@@ -39,6 +50,7 @@ object Swerve : SubsystemBase() {
     private val pid: Pingu
     private var currentPose: Pose2d? = Pose2d(0.0, 0.0, Rotation2d(0.0))
     private var pathToScore: PathPlannerPath? = null
+
 
     var swerveLoggingThread: Thread =
         Thread {
@@ -181,6 +193,25 @@ object Swerve : SubsystemBase() {
             },
             this,
         )
+    }
+
+    /**
+     * Applies the current swerve drive state to the swerve modules. Should be called in [periodic].
+     *
+     * - When in [SwerveDriveState.FIELD_ORIENTED], moves the robot according to the driver input using the wrapper function [fieldDriveUsingController].
+     * - When in [SwerveDriveState.SHOOTING], restricts driver input to only movement, no rotation...as long as we are using a non-turret. Two auto-heading behaviors
+     *      - If in shooting zone, Robot heading automatically points towards team hub
+     *      - If in the center, Robot heading offsets to the closest side of the team hub
+     */
+
+    private fun applySwerveState() {
+        when (swerveState) {
+            SwerveDriveState.FIELD_ORIENTED -> {
+                fieldDriveUsingController()
+            }
+            SwerveDriveState.SHOOTING -> {
+            }
+        }
     }
 
     /**
@@ -390,6 +421,35 @@ object Swerve : SubsystemBase() {
         for (module in modules) {
             module.updateTelePID()
         }
+    }
+
+    /**
+     * Drive the robot using an Xbox controller in field-oriented mode.
+     *
+     * @param controller The Xbox controller to use for driving.
+     */
+
+    fun fieldDriveUsingController(controller : XboxController){
+        var x: Double = -controller.leftX * MAX_SPEED
+        if (abs(x) < X_DEADZONE * MAX_SPEED) x = 0.0
+        x *= if (slowmode) 0.25 else 1.0
+
+        var y: Double = -controller.leftY * MAX_SPEED
+        if (abs(y) < Y_DEADZONE * MAX_SPEED) y = 0.0
+        y *= if (slowmode) 0.25 else 1.0
+
+        val rotation = if (abs(controller.rightX) >= 0.1) (-controller.rightX * MAX_ANGULAR_SPEED * if (slowmode) 0.0625 else 0.25) else 0.0
+
+        // I dunno how logging works yet lol - Sam
+//        logs {
+//            log("Swerve/Drive/X Speed", x)
+//            log("Swerve/Drive/Y Speed", y)
+//            log("Swerve/Drive/Rotation Speed", rotation)
+//            log("Swerve/Drive/Vision Dead", visionDead)
+//            log("Swerve/Drive/Slow Mode Enabled", slowmode)
+//        }
+
+        setDriveSpeeds(y, x, rotation, true)
     }
 
     fun pathFindToGoal(): Command? = AutoBuilder.pathfindThenFollowPath(pathToScore, constraints)

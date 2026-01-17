@@ -9,9 +9,20 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import frc.robot.utils.emu.HoodState
 import xyz.malefic.frc.pingu.control.Pingu
 import frc.robot.utils.emu.ShooterState
+import frc.robot.utils.emu.SwerveDriveState
 
 /** Class containing global values for the robot.  */
 object RobotParameters {
+
+    /**
+     * Class containing global values related to the game's state like our team color and the hub cycle.
+     */
+    object GameParameters {
+        // should probably change this to an enum later for scalability (even if not needed) - Sam
+        var teamColor : String = "Red"
+        var isHubActiveFirst : Boolean = true
+    }
+
     /** Class containing global values related to motors.  */
     object MotorParameters {
         // Motor CAN ID Values
@@ -67,6 +78,10 @@ object RobotParameters {
 
     /** Class containing global values related to the swerve drive system.  */
     object SwerveParameters {
+        var swerveState: SwerveDriveState = SwerveDriveState.FIELD_ORIENTED
+
+        var slowmode: Boolean = false
+
         const val PATHPLANNER_AUTO_NAME: String = "4l4auto"
 
         const val AUTO_ALIGN_SWERVE_LEFT: Double = -0.1

@@ -11,11 +11,11 @@ enum class ShooterState(
 enum class HoodState(
     var velocity: Double,
 ) {
-    /*
+    /**
      * Should be unneeded when we implement auto-aim? | changes trajectory to be more upwards.
      */
     HOOD_UP(5.0),
-    /*
+    /**
      * Should be unneeded when we implement auto-aim? | changes trajectory to be more downwards.
      */
     HOOD_DOWN(-5.0),
