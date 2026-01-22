@@ -15,10 +15,13 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 import xyz.malefic.frc.emu.Button
 import xyz.malefic.frc.emu.Button.START
 import xyz.malefic.frc.emu.Button.Y
+import xyz.malefic.frc.emu.Button.RIGHT_TRIGGER
 import xyz.malefic.frc.pingu.binding.Bingu.bindings
 import frc.robot.utils.RobotParameters.ShooterParameters.shooterState
 import frc.robot.subsystems.Shooter
 import frc.robot.utils.emu.ShooterState
+import frc.robot.utils.emu.SwerveDriveState
+import frc.robot.utils.RobotParameters.SwerveParameters.swerveState
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -58,8 +61,10 @@ class RobotContainer {
         pad.bindings {
             press(Y) { setTelePid() }
             press(START) { resetPidgey() }
-            press(Button.LEFT_TRIGGER) { shooterState = ShooterState.FULL_SPEED }
-            release(Button.LEFT_TRIGGER) { shooterState = ShooterState.OFF }
+            // press(Button.LEFT_TRIGGER) { shooterState = ShooterState.FULL_SPEED } --not needed when the overall SHOOT state is implemented
+            // release(Button.LEFT_TRIGGER) { shooterState = ShooterState.OFF }
+            hold(Button.RIGHT_TRIGGER) { swerveState = SwerveDriveState.SHOOTING}
+            release(Button.RIGHT_TRIGGER) { swerveState = SwerveDriveState.FIELD_ORIENTED }
         }
     }
 

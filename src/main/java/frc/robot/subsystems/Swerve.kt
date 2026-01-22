@@ -207,9 +207,10 @@ object Swerve : SubsystemBase() {
     private fun applySwerveState() {
         when (swerveState) {
             SwerveDriveState.FIELD_ORIENTED -> {
-                fieldDriveUsingController()
+                fieldDriveUsingController(XboxController(1), true)
             }
             SwerveDriveState.SHOOTING -> {
+                fieldDriveUsingController(XboxController(1), false)
             }
         }
     }
@@ -244,6 +245,8 @@ object Swerve : SubsystemBase() {
         "Pidgey Yaw" log this.pidgeyYaw
         "Pidgey Rotation2D" log this.pidgeyRotation.degrees
         "Robot Pose" log field.robotPose
+
+        applySwerveState()
     }
 
     /**
@@ -429,7 +432,7 @@ object Swerve : SubsystemBase() {
      * @param controller The Xbox controller to use for driving.
      */
 
-    fun fieldDriveUsingController(controller : XboxController){
+    fun fieldDriveUsingController(controller : XboxController, rotationOn : Boolean){
         var x: Double = -controller.leftX * MAX_SPEED
         if (abs(x) < X_DEADZONE * MAX_SPEED) x = 0.0
         x *= if (slowmode) 0.25 else 1.0
@@ -438,9 +441,13 @@ object Swerve : SubsystemBase() {
         if (abs(y) < Y_DEADZONE * MAX_SPEED) y = 0.0
         y *= if (slowmode) 0.25 else 1.0
 
-        val rotation = if (abs(controller.rightX) >= 0.1) (-controller.rightX * MAX_ANGULAR_SPEED * if (slowmode) 0.0625 else 0.25) else 0.0
+        val rotation = if(rotationOn){
+            if (abs(controller.rightX) >= 0.1) (-controller.rightX * MAX_ANGULAR_SPEED * if (slowmode) 0.0625 else 0.25) else 0.0
+        } else {
+            0.0
+        }
 
-        // I dunno how logging works yet lol - Sam
+        // I don't know how logging works yet lol - Sam
 //        logs {
 //            log("Swerve/Drive/X Speed", x)
 //            log("Swerve/Drive/Y Speed", y)

@@ -4,12 +4,16 @@ import com.ctre.phoenix6.signals.InvertedValue
 import com.pathplanner.lib.config.PIDConstants
 import com.pathplanner.lib.config.RobotConfig
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
+import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import frc.robot.utils.emu.HoodState
 import xyz.malefic.frc.pingu.control.Pingu
 import frc.robot.utils.emu.ShooterState
 import frc.robot.utils.emu.SwerveDriveState
+import edu.wpi.first.math.geometry.Pose3d
+import edu.wpi.first.math.geometry.Rotation3d
+import edu.wpi.first.math.util.Units
 
 /** Class containing global values for the robot.  */
 object RobotParameters {
@@ -19,8 +23,25 @@ object RobotParameters {
      */
     object GameParameters {
         // should probably change this to an enum later for scalability (even if not needed) - Sam
+
+        /**
+         * The team color of the robot, either "Red" or "Blue", Used to determine hub location for shooting.
+         */
         var teamColor : String = "Red"
+
+        /**
+         * Boolean indicating if the hub is active first in the game cycle.  True if hub is active first, false otherwise. Should be controlled on TeleOp init by driver.
+         */
         var isHubActiveFirst : Boolean = true
+    }
+
+    object FieldParameters {
+        // Because imperial sucks.
+        val FIELD_WIDTH : Double = Units.inchesToMeters(317.7)
+        val FIELD_HEIGHT : Double = Units.inchesToMeters(651.2)
+        val RED_HUB_SCORE_POSITION: Pose3d = Pose3d(Units.inchesToMeters(158.83), Units.inchesToMeters(158.85), Units.inchesToMeters(72.0), Rotation3d.kZero)
+        val BLUE_HUB_SCORE_POSITION: Pose3d = Pose3d(FIELD_WIDTH - Units.inchesToMeters(158.83), Units.inchesToMeters(158.85), Units.inchesToMeters(72.0), Rotation3d.kZero)
+
     }
 
     /** Class containing global values related to motors.  */

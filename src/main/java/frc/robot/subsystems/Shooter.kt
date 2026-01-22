@@ -16,6 +16,8 @@ import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import frc.robot.utils.emu.HoodState
+import frc.robot.utils.emu.SwerveDriveState
+import frc.robot.utils.RobotParameters.SwerveParameters.swerveState
 
 
 object Shooter : SubsystemBase() {
@@ -46,6 +48,12 @@ object Shooter : SubsystemBase() {
         }
 
     override fun periodic() {
+
+        shooterState = when (swerveState){
+            SwerveDriveState.FIELD_ORIENTED -> {ShooterState.OFF}
+            SwerveDriveState.SHOOTING -> {ShooterState.FULL_SPEED}
+        }
+
         setShooterSpeed(-shooterState.velocity, shooterState.velocity)
         setHoodSpeed(hoodState.velocity)
     }
